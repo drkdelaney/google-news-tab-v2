@@ -10,6 +10,12 @@ export function appReducer(state: AppState, action: Action): AppState {
                 weather: action.weather,
             };
         }
+        case ActionType.SET_DOODLES: {
+            return {
+                ...state,
+                doodles: action.doodles,
+            };
+        }
         default: {
             throw new Error(`Undefined action type`);
         }

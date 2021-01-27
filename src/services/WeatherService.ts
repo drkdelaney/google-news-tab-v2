@@ -1,7 +1,7 @@
 import { GridPoints, Weather } from '../models';
 import { getLatLong } from './LocationService';
 
-export async function getCurrentWeather() {
+export async function loadCurrentWeather() {
     const weatherGovBase = `https://api.weather.gov/points`;
     try {
         const [lat, long]: [number, number] = await getLatLong();
