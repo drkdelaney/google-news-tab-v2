@@ -5,11 +5,8 @@ export async function getCurrentWeather() {
     const weatherGovBase = `https://api.weather.gov/points`;
     try {
         const [lat, long]: [number, number] = await getLatLong();
-        const headers: Headers = new Headers();
-        headers.set('User-Agent', '(News Tab), derek.e.delaney@gmail.com');
         const gridPointResponse: Response = await fetch(
-            `${weatherGovBase}/${lat.toFixed(4)},${long.toFixed(4)}`,
-            { headers }
+            `${weatherGovBase}/${lat.toFixed(4)},${long.toFixed(4)}`
         );
         const gridPoints: GridPoints = await gridPointResponse.json();
         const weatherResponse: Response = await fetch(
