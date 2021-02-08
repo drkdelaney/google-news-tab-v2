@@ -15,6 +15,6 @@ export async function loadCurrentWeather() {
         const weather: Weather = await weatherResponse.json();
         return weather;
     } catch (e) {
-        console.error(e);
+        throw new Error(e);
     }
 }

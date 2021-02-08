@@ -23,12 +23,16 @@ export function GoogleImage() {
     return (
         <LogoContainer>
             <GoogleLogo href="https://www.google.com/">
-                <img
-                    src={logo}
-                    className="App-logo"
-                    alt="google logo"
-                    title="google"
-                />
+                {doodles ? (
+                    <img src="" alt="" />
+                ) : (
+                    <img
+                        src={logo}
+                        className="App-logo"
+                        alt="google logo"
+                        title="google"
+                    />
+                )}
             </GoogleLogo>
         </LogoContainer>
     );

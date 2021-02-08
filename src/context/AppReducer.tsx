@@ -10,10 +10,22 @@ export function appReducer(state: AppState, action: Action): AppState {
                 weather: action.weather,
             };
         }
+        case ActionType.SET_CURRENT_WEATHER_ERROR: {
+            return {
+                ...state,
+                weatherError: action.error,
+            };
+        }
         case ActionType.SET_DOODLES: {
             return {
                 ...state,
                 doodles: action.doodles,
+            };
+        }
+        case ActionType.SET_DOODLES_ERROR: {
+            return {
+                ...state,
+                doodlesError: action.error,
             };
         }
         default: {
