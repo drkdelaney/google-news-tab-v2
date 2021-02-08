@@ -5,17 +5,17 @@ const apiKey = 'xSM1rvLyj1C2WP4Y1FS18CoEBqvu8yO9jikwslP4';
 
 export async function loadDoodles(): Promise<Doodle[]> {
     const now = new Date();
-    const currentDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
+    const currentDate = Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate()
     );
-    console.log(currentDate.getTime());
+    console.log(currentDate);
     try {
         const headers = new Headers();
         headers.set('x-api-key', apiKey);
         const doodleResponse = await fetch(
-            `${googleDoodleURL}?pubDate=${currentDate.getTime()}`
+            `${googleDoodleURL}?pubDate=${currentDate}`
         );
         const { items } = (await doodleResponse.json()) as Response<Doodle>;
         return items;
