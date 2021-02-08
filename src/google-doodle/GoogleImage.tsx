@@ -19,12 +19,18 @@ const GoogleLogo = styled.a`
 
 export function GoogleImage() {
     const { doodles } = useAppState();
+    const random = doodles?.length
+        ? Math.floor(Math.random() * doodles?.length)
+        : 0;
 
     return (
         <LogoContainer>
             <GoogleLogo href="https://www.google.com/">
-                {doodles ? (
-                    <img src="" alt="" />
+                {doodles?.length && doodles.length > 0 ? (
+                    <img
+                        src={doodles[random].image}
+                        alt={doodles[random].title}
+                    />
                 ) : (
                     <img
                         src={logo}
