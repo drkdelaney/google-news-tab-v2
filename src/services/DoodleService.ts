@@ -10,12 +10,11 @@ export async function loadDoodles(): Promise<Doodle[]> {
         now.getUTCMonth(),
         now.getUTCDate()
     );
-    console.log(currentDate);
     try {
-        const headers = new Headers();
-        headers.set('x-api-key', apiKey);
+        // const headers = new Headers();
+        // headers.set('x-api-key', apiKey);
         const doodleResponse = await fetch(
-            `${googleDoodleURL}?pubDate=${currentDate}`
+            `${googleDoodleURL}?pubDate=${currentDate}&apiKey=${apiKey}`
         );
         const { items } = (await doodleResponse.json()) as Response<Doodle>;
         return items;

@@ -12,9 +12,13 @@ const LogoContainer = styled.div`
     align-content: flex-end;
 `;
 
-const GoogleLogo = styled.a`
+const GoogleLogo = styled.img`
     height: 92px;
     width: 272px;
+`;
+
+const DoodleImg = styled.img`
+    height: 220px;
 `;
 
 export function GoogleImage() {
@@ -25,21 +29,22 @@ export function GoogleImage() {
 
     return (
         <LogoContainer>
-            <GoogleLogo href="https://www.google.com/">
+            <a href="https://www.google.com/">
                 {doodles?.length && doodles.length > 0 ? (
-                    <img
+                    <DoodleImg
                         src={doodles[random].image}
                         alt={doodles[random].title}
+                        title={doodles[random].title}
                     />
                 ) : (
-                    <img
+                    <GoogleLogo
                         src={logo}
                         className="App-logo"
                         alt="google logo"
                         title="google"
                     />
                 )}
-            </GoogleLogo>
+            </a>
         </LogoContainer>
     );
 }

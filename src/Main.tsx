@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useAppDispatch } from './context/AppContext';
 import { GoogleImage } from './google-doodle/GoogleImage';
 import { ActionType } from './models';
+import { SearchBar } from './search-bar/SearchBar';
 import { loadDoodles } from './services/DoodleService';
 import { loadCurrentWeather } from './services/WeatherService';
 import Weather from './weather/Weather';
@@ -33,6 +34,7 @@ function Main() {
         <>
             <Weather></Weather>
             <GoogleImage></GoogleImage>
+            <SearchBar></SearchBar>
         </>
     );
 }
