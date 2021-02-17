@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useAppState } from '../context/AppContext';
+import { useRandomNumber } from '../util/RandomNumber';
 import logo from './google-logo.svg';
 
 const LogoContainer = styled.div`
@@ -23,28 +24,28 @@ const DoodleImg = styled.img`
 
 export function GoogleImage() {
     const { doodles } = useAppState();
-    const random = doodles?.length
-        ? Math.floor(Math.random() * doodles?.length)
-        : 0;
+    const random = useRandomNumber(doodles?.length ?? 0);
 
     return (
         <LogoContainer>
-            <a href="https://www.google.com/">
-                {doodles?.length && doodles.length > 0 ? (
+            {doodles?.length && doodles.length > 0 ? (
+                <a href={doodles[random].link}>
                     <DoodleImg
                         src={doodles[random].image}
                         alt={doodles[random].title}
                         title={doodles[random].title}
                     />
-                ) : (
+                </a>
+            ) : (
+                <a href="https://www.google.com/">
                     <GoogleLogo
                         src={logo}
                         className="App-logo"
                         alt="google logo"
                         title="google"
                     />
-                )}
-            </a>
+                </a>
+            )}
         </LogoContainer>
     );
 }
