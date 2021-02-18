@@ -2,12 +2,14 @@ import { GridPoints, Weather } from '../models';
 import { getLatLong } from './LocationService';
 
 export async function loadCurrentWeather() {
-    const weatherGovBase = `https://api.weather.gov/points`;
+    const weatherGovBase = `https://api.weather.gov`;
     try {
         const [lat, long]: [number, number] = await getLatLong();
-        const gridPointResponse: Response = await fetch(
-            `${weatherGovBase}/${lat.toFixed(4)},${long.toFixed(4)}`
+        const url = new URL(
+            `points/${lat.toFixed(4)},${long.toFixed(4)}`,
+            weatherGovBase
         );
+        const gridPointResponse: Response = await fetch(url.href);
         const gridPoints: GridPoints = await gridPointResponse.json();
         const weatherResponse: Response = await fetch(
             gridPoints?.properties?.forecast

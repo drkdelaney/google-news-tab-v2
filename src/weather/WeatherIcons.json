@@ -21,9 +21,9 @@
         }
     },
     "bkn": {
-        "description": "Mostly cloudy",
+        "description": "Partly Sunny",
         "icons": {
-            "day": "weather-icons/day_cloudy.png",
+            "day": "weather-icons/day_partly_cloudy.png",
             "night": "weather-icons/night_cloudy.png"
         }
     },

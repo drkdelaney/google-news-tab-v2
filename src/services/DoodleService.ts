@@ -6,16 +6,15 @@ const apiKey = 'xSM1rvLyj1C2WP4Y1FS18CoEBqvu8yO9jikwslP4';
 export async function loadDoodles(): Promise<Doodle[]> {
     const now = new Date();
     const currentDate = Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate()
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
     );
     try {
-        // const headers = new Headers();
-        // headers.set('x-api-key', apiKey);
-        const doodleResponse = await fetch(
-            `${googleDoodleURL}?pubDate=${currentDate}&apiKey=${apiKey}`
-        );
+        const doodleURL = new URL(googleDoodleURL);
+        doodleURL.searchParams.set('apiKey', apiKey);
+        doodleURL.searchParams.set('pubDate', `${currentDate}`);
+        const doodleResponse = await fetch(doodleURL.href);
         const { items } = (await doodleResponse.json()) as Response<Doodle>;
         return items;
     } catch (e) {
