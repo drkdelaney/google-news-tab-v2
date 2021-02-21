@@ -23,8 +23,6 @@ export function NewsTabs() {
     const { topics } = useAppState();
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    console.log(selectedIndex);
-
     return (
         <Container>
             <Row count={topics.length + 1}>
@@ -35,7 +33,6 @@ export function NewsTabs() {
                                 key={topic.id}
                                 label={topic.value}
                                 onClick={() => {
-                                    console.log(i);
                                     setSelectedIndex(i);
                                 }}
                             />
