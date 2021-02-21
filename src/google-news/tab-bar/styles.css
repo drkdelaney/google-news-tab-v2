@@ -1,0 +1,144 @@
+.container {
+    align-items: center;
+    display: inline-flex;
+    font-family: 'Roboto';
+    font-size: 0.8125rem;
+    height: 48px;
+    margin: 0 5px;
+    position: relative;
+}
+
+.input {
+    border: none;
+    border-bottom: 2px solid #40a9ff;
+    outline: none;
+    font-size: inherit;
+    width: 0;
+}
+
+.input.expanded {
+    animation: 500ms ease-out inputGrow;
+    animation-fill-mode: forwards;
+}
+
+.input.collapsed {
+    animation: 500ms ease-out inputShrink;
+    animation-fill-mode: forwards;
+}
+
+.circle {
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    height: 16px;
+    line-height: 16px;
+    opacity: 0.7;
+    text-align: center;
+    width: 16px;
+}
+
+.circle:hover {
+    opacity: 1;
+}
+
+.add {
+    background-color: #40a9ff;
+    z-index: 1;
+}
+
+.add.expanded {
+    animation: spinClockwise 500ms ease-out;
+    animation-fill-mode: forwards;
+}
+
+.add.collapsed {
+    animation: spinCounter 500ms ease-out;
+    animation-fill-mode: forwards;
+}
+
+.done {
+    background-color: #00aa4c;
+    margin-left: -16px;
+}
+
+.doneShow {
+    animation: dash 100ms ease-out;
+    animation-fill-mode: forwards;
+}
+
+.doneHide {
+    animation: dashReverse 100ms ease-out;
+    animation-fill-mode: forwards;
+}
+
+.show {
+    display: initial;
+}
+
+.hide {
+    display: none;
+}
+
+@keyframes spinClockwise {
+    0% {
+        transform: rotate(0deg);
+        background-color: #40a9ff;
+    }
+    60% {
+        background-color: #40a9ff;
+    }
+    100% {
+        transform: rotate(405deg);
+        background-color: #ff5842;
+    }
+}
+
+@keyframes spinCounter {
+    0% {
+        transform: rotate(0deg);
+        background-color: #ff5842;
+    }
+    60% {
+        background-color: #40a9ff;
+    }
+    100% {
+        transform: rotate(-360deg);
+        background-color: #40a9ff;
+    }
+}
+
+@keyframes inputGrow {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100px;
+    }
+}
+
+@keyframes inputShrink {
+    from {
+        width: 100px;
+    }
+    to {
+        width: 0;
+    }
+}
+
+@keyframes dash {
+    from {
+        margin-left: -16px;
+    }
+    to {
+        margin-left: 4px;
+    }
+}
+
+@keyframes dashReverse {
+    from {
+        margin-left: 4px;
+    }
+    to {
+        margin-left: -16px;
+    }
+}

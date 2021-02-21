@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch } from './context/AppContext';
-import { GoogleImage } from './google-doodle/GoogleImage';
+import { GoogleImage } from './google-doodle';
+import { NewsTabs } from './google-news';
 import { ActionType } from './models';
-import { SearchBar } from './search-bar/SearchBar';
-import { loadDoodles } from './services/DoodleService';
-import { loadCurrentWeather } from './services/WeatherService';
+import { SearchBar } from './search-bar';
+import { loadDoodles } from './services';
+import { loadCurrentWeather } from './services';
 import Weather from './weather/Weather';
 
 function Main() {
@@ -35,6 +36,7 @@ function Main() {
             <Weather></Weather>
             <GoogleImage></GoogleImage>
             <SearchBar></SearchBar>
+            <NewsTabs></NewsTabs>
         </>
     );
 }

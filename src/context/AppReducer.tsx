@@ -28,6 +28,12 @@ export function appReducer(state: AppState, action: Action): AppState {
                 doodlesError: action.error,
             };
         }
+        case ActionType.ADD_TOPIC: {
+            return {
+                ...state,
+                topics: [...state.topics, action.topic],
+            };
+        }
         default: {
             throw new Error(`Undefined action type`);
         }
