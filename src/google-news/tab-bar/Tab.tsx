@@ -43,7 +43,13 @@ const StyledButton = styled.button`
 
 const Tab = forwardRef<HTMLButtonElement, TabProps>((props, ref) => (
     <StyledButton ref={ref} onClick={props.onClick}>
-        <span>{props.label}</span>
+        <span
+            onClick={(e) => {
+                e.preventDefault();
+            }}
+        >
+            {props.label}
+        </span>
     </StyledButton>
 ));
 

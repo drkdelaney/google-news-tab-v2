@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppState } from '../../context/AppContext';
 import { Topic } from '../../models';
@@ -35,6 +35,7 @@ export function NewsTabs() {
                                 key={topic.id}
                                 label={topic.value}
                                 onClick={() => {
+                                    console.log(i);
                                     setSelectedIndex(i);
                                 }}
                             />
@@ -71,21 +72,29 @@ const TabsContainer = styled.div`
 function Tabs(props: TabsProps) {
     const containerRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const tabRef = useRef() as React.MutableRefObject<HTMLButtonElement>;
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    const tabRect = tabRef?.current?.getBoundingClientRect();
+    const [left, setLeft] = useState(0);
+    const [width, setWidth] = useState(0);
+
     console.log(tabRef.current, props.selectedIndex);
+    useEffect(() => {
+        const containerRect = containerRef.current?.getBoundingClientRect();
+        const tabRect = tabRef?.current?.getBoundingClientRect();
+        const left = (tabRect?.left ?? 0) - (containerRect?.left ?? 0);
+        const width = tabRect?.width;
+        setLeft(left);
+        setWidth(width);
+    }, [props.selectedIndex]);
+
     const children = React.Children.map(props.children, (child, i) => {
         return React.cloneElement(child, {
             ref: props.selectedIndex === i ? tabRef : null,
         });
     });
+
     return (
         <TabsContainer ref={containerRef}>
             {children}
-            <SelectedBar
-                left={tabRect?.left - containerRect?.left}
-                width={tabRect?.width}
-            />
+            <SelectedBar left={left} width={width} />
         </TabsContainer>
     );
 }
