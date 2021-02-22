@@ -37,7 +37,6 @@ function Main() {
             try {
                 const news = await loadRSSFeed(topic);
                 if (news) {
-                    console.log(news);
                     dispatch({
                         type: ActionType.SET_RSS_DATA,
                         data: news,
