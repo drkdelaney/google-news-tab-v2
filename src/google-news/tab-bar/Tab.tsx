@@ -32,7 +32,7 @@ const StyledButton = styled.button`
     white-space: nowrap;
 
     &:hover {
-        color: #40a9ff;
+        color: #4285f4;
         opacity: 1;
     }
 
@@ -41,7 +41,7 @@ const StyledButton = styled.button`
     }
 `;
 
-const Tab = forwardRef<HTMLButtonElement, TabProps>((props, ref) => (
+export const Tab = forwardRef<HTMLButtonElement, TabProps>((props, ref) => (
     <StyledButton ref={ref} onClick={props.onClick}>
         <span
             onClick={(e) => {
@@ -52,5 +52,3 @@ const Tab = forwardRef<HTMLButtonElement, TabProps>((props, ref) => (
         </span>
     </StyledButton>
 ));
-
-export { Tab };

@@ -43,7 +43,7 @@
 }
 
 .add {
-    background-color: #40a9ff;
+    background-color: #4285f4;
     z-index: 1;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .done {
-    background-color: #00aa4c;
+    background-color: #34a853;
     margin-left: -16px;
 }
 
@@ -83,28 +83,28 @@
 @keyframes spinClockwise {
     0% {
         transform: rotate(0deg);
-        background-color: #40a9ff;
+        background-color: #4285f4;
     }
     60% {
-        background-color: #40a9ff;
+        background-color: #4285f4;
     }
     100% {
         transform: rotate(405deg);
-        background-color: #ff5842;
+        background-color: #ea4335;
     }
 }
 
 @keyframes spinCounter {
     0% {
         transform: rotate(0deg);
-        background-color: #ff5842;
+        background-color: #ea4335;
     }
     60% {
-        background-color: #40a9ff;
+        background-color: #4285f4;
     }
     100% {
         transform: rotate(-360deg);
-        background-color: #40a9ff;
+        background-color: #4285f4;
     }
 }
 
