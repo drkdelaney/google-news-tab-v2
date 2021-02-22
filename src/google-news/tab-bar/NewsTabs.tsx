@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useAppState } from '../../context/AppContext';
-import { Topic } from '../../models';
+import { useAppDispatch, useAppState } from '../../context/AppContext';
+import { ActionType, Topic } from '../../models';
 import { Tab, AddTab, Tabs } from '.';
 
 const Container = styled.div`
@@ -21,7 +21,20 @@ const Row = styled.div<{ count: number }>`
 
 export function NewsTabs() {
     const { topics } = useAppState();
+    const dispatch = useAppDispatch();
     const [selectedIndex, setSelectedIndex] = useState(0);
+
+    function updateSelection(topic: Topic, index: number) {
+        setSelectedIndex(index);
+        dispatch({
+            type: ActionType.SET_CURRENT_TOPIC,
+            topic,
+        });
+    }
+
+    useEffect(() => {
+        dispatch({ type: ActionType.SET_CURRENT_TOPIC, topic: topics[0] });
+    }, []);
 
     return (
         <Container>
@@ -33,13 +46,18 @@ export function NewsTabs() {
                                 key={topic.id}
                                 label={topic.value}
                                 onClick={() => {
-                                    setSelectedIndex(i);
+                                    updateSelection(topics[i], i);
                                 }}
                             />
                         );
                     })}
                 </Tabs>
-                <AddTab key="addTabKey" />
+                <AddTab
+                    key="addTabKey"
+                    onTabAdded={(topic: Topic) => {
+                        updateSelection(topic, topics.length);
+                    }}
+                />
             </Row>
         </Container>
     );

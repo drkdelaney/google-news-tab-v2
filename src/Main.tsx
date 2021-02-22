@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { useAppDispatch } from './context/AppContext';
+import { useAppDispatch, useAppState } from './context/AppContext';
 import { GoogleImage } from './google-doodle';
 import { NewsTabs } from './google-news';
-import { ActionType } from './models';
+import { ActionType, Topic } from './models';
 import { SearchBar } from './search-bar';
-import { loadDoodles } from './services';
+import { loadDoodles, loadRSSFeed } from './services';
 import { loadCurrentWeather } from './services';
 import Weather from './weather/Weather';
 
 function Main() {
     const dispatch = useAppDispatch();
+    const { currentTopic } = useAppState();
     useEffect(() => {
         const init = async () => {
             try {
@@ -31,6 +32,26 @@ function Main() {
         };
         init();
     }, []);
+    useEffect(() => {
+        const loadRSS = async (topic: Topic) => {
+            try {
+                const news = await loadRSSFeed(topic);
+                if (news) {
+                    console.log(news);
+                    dispatch({
+                        type: ActionType.SET_RSS_DATA,
+                        data: news,
+                        key: topic.id,
+                    });
+                }
+            } catch (error) {
+                dispatch({ type: ActionType.SET_RSS_ERROR, error });
+            }
+        };
+        if (currentTopic) {
+            loadRSS(currentTopic);
+        }
+    }, [currentTopic]);
     return (
         <>
             <Weather></Weather>

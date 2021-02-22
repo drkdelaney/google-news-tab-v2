@@ -1,9 +1,9 @@
 export class NewsURL {
-    private topic: string;
+    private query: string;
     private rssAPIKey = 'uhvrh7g3aqgxmvoe3ehxnxl0r6rq8frx5wymysjn';
 
-    constructor(t: string) {
-        this.topic = t;
+    constructor(q: string) {
+        this.query = q;
     }
 
     public get RSSNewsTopicURL() {
@@ -18,6 +18,10 @@ export class NewsURL {
         return url.href;
     }
 
+    public googleRSSTopNews() {
+        return `https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/news/rss&count=38&api_key=uhvrh7g3aqgxmvoe3ehxnxl0r6rq8frx5wymysjn`;
+    }
+
     public googleRSSLocal(location: string) {
         return `https://api.rss2json.com/v1/api.json?rss_url=https://news.google.com/news/rss/headlines/section/geo/${location}&count=38&api_key=uhvrh7g3aqgxmvoe3ehxnxl0r6rq8frx5wymysjn`;
     }
@@ -27,11 +31,11 @@ export class NewsURL {
     }
 
     private get googleQuery() {
-        return `https://news.google.com/news/rss?q=${this.topic}`;
+        return `https://news.google.com/news/rss?q=${this.query}`;
     }
 
     private get googleRSSTopic() {
-        return `https://news.google.com/news/rss/headlines/section/topic/${this.topic}`;
+        return `https://news.google.com/news/rss/headlines/section/topic/${this.query}`;
     }
 
     private get RSSToJSON() {

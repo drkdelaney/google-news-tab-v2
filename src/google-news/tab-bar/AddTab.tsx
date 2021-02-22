@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react';
 import cx from 'classnames';
-import shortid from 'shortid';
 import './styles.css';
 import { useAppDispatch } from '../../context/AppContext';
 import { ActionType, Topic } from '../../models';
 
-export function AddTab() {
+interface AddTabProps {
+    onTabAdded?: (topic: Topic) => void;
+}
+
+export function AddTab(props: AddTabProps) {
     const dispatch = useAppDispatch();
     const [expanded, setExpanded] = useState(false);
     const [inputHidden, setInputHidden] = useState(true);
@@ -14,7 +17,7 @@ export function AddTab() {
     const [input, setInput] = useState('');
     const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-    const toggleInputs = function (callback?: Function) {
+    function toggleInputs(callback?: Function) {
         if (expanded) {
             setDoneHidden(true);
             setTimeout(() => {
@@ -35,16 +38,18 @@ export function AddTab() {
                 setInputFinished(true);
             }, 500);
         }
-    };
+    }
 
-    const save = () => {
+    function save() {
         toggleInputs(() => {
+            const topic = new Topic(input);
             dispatch({
                 type: ActionType.ADD_TOPIC,
-                topic: new Topic(input),
+                topic,
             });
+            if (props.onTabAdded) props.onTabAdded(topic);
         });
-    };
+    }
 
     return (
         <div className="container">

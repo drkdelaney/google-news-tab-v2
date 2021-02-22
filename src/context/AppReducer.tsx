@@ -34,6 +34,24 @@ export function appReducer(state: AppState, action: Action): AppState {
                 topics: [...state.topics, action.topic],
             };
         }
+        case ActionType.SET_CURRENT_TOPIC: {
+            return {
+                ...state,
+                currentTopic: action.topic,
+            };
+        }
+        case ActionType.SET_RSS_DATA: {
+            return {
+                ...state,
+                rssData: state.rssData.set(action.key, action.data),
+            };
+        }
+        case ActionType.SET_RSS_ERROR: {
+            return {
+                ...state,
+                rssError: action.error,
+            };
+        }
         default: {
             throw new Error(`Undefined action type`);
         }

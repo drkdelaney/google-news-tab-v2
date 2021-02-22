@@ -1,9 +1,10 @@
 import { getLatLong, NewsURL } from '.';
+import { Topic } from '../models';
 
-export async function loadRSSFeed(topic: string) {
-    const newsURL = new NewsURL(topic);
+export async function loadRSSFeed(topic: Topic) {
+    const newsURL = new NewsURL(topic.query);
 
-    switch (topic) {
+    switch (topic.query) {
         case 'WORLD':
         case 'NATION':
         case 'BUSINESS':
@@ -12,7 +13,9 @@ export async function loadRSSFeed(topic: string) {
         case 'SPORTS':
         case 'SCIENCE':
         case 'HEALTH':
-            return fetch(newsURL.RSSNewsTopicURL);
+            return handleRequest(fetch(newsURL.RSSNewsTopicURL));
+        case 'TOP_NEWS':
+            return handleRequest(fetch(newsURL.googleRSSTopNews()));
         case 'LOCAL':
             const [lat, long] = await getLatLong();
             const response = await fetch(newsURL.openStreetMapUrl(lat, long));
@@ -33,8 +36,18 @@ export async function loadRSSFeed(topic: string) {
                     cityOrNeighborhood ? cityOrNeighborhood + ',' : ''
                 }${state ? state.toLowerCase() : ''}`;
             }
-            return fetch(newsURL.googleRSSLocal(location ?? ''));
+            return handleRequest(fetch(newsURL.googleRSSLocal(location ?? '')));
         default:
-            return fetch(newsURL.RSSNewsQueryURL);
+            return handleRequest(fetch(newsURL.RSSNewsQueryURL));
+    }
+}
+
+async function handleRequest(request: Promise<Response>) {
+    try {
+        const response = await request;
+        const { items } = await response.json();
+        return items;
+    } catch (e) {
+        throw new Error(e);
     }
 }

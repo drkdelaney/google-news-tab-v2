@@ -17,12 +17,12 @@
 }
 
 .input.expanded {
-    animation: 500ms ease-out inputGrow;
+    animation: 500ms cubic-bezier(0.4, 0, 0.2, 1) inputGrow;
     animation-fill-mode: forwards;
 }
 
 .input.collapsed {
-    animation: 500ms ease-out inputShrink;
+    animation: 500ms cubic-bezier(0.4, 0, 0.2, 1) inputShrink;
     animation-fill-mode: forwards;
 }
 
@@ -48,12 +48,12 @@
 }
 
 .add.expanded {
-    animation: spinClockwise 500ms ease-out;
+    animation: spinClockwise 500ms cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: forwards;
 }
 
 .add.collapsed {
-    animation: spinCounter 500ms ease-out;
+    animation: spinCounter 500ms cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: forwards;
 }
 
@@ -63,12 +63,12 @@
 }
 
 .doneShow {
-    animation: dash 100ms ease-out;
+    animation: dash 100ms cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: forwards;
 }
 
 .doneHide {
-    animation: dashReverse 100ms ease-out;
+    animation: dashReverse 100ms cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: forwards;
 }
 
@@ -89,7 +89,7 @@
         background-color: #4285f4;
     }
     100% {
-        transform: rotate(405deg);
+        transform: rotate(315deg);
         background-color: #ea4335;
     }
 }
@@ -103,7 +103,7 @@
         background-color: #4285f4;
     }
     100% {
-        transform: rotate(-360deg);
+        transform: rotate(-270deg);
         background-color: #4285f4;
     }
 }

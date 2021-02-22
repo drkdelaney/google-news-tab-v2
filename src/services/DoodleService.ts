@@ -1,4 +1,4 @@
-import { Doodle, Response } from '../models';
+import { Doodle, AWSResponse } from '../models';
 
 const googleDoodleURL = `https://3esokhxlqe.execute-api.us-east-1.amazonaws.com/dev/doodles`;
 const apiKey = 'xSM1rvLyj1C2WP4Y1FS18CoEBqvu8yO9jikwslP4';
@@ -15,7 +15,7 @@ export async function loadDoodles(): Promise<Doodle[]> {
         doodleURL.searchParams.set('apiKey', apiKey);
         doodleURL.searchParams.set('pubDate', `${currentDate}`);
         const doodleResponse = await fetch(doodleURL.href);
-        const { items } = (await doodleResponse.json()) as Response<Doodle>;
+        const { items } = (await doodleResponse.json()) as AWSResponse<Doodle>;
         return items;
     } catch (e) {
         throw new Error(e);

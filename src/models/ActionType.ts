@@ -4,4 +4,7 @@ export enum ActionType {
     ADD_TOPIC = 'addTopic',
     SET_DOODLES = 'setDoodles',
     SET_DOODLES_ERROR = 'setDoodlesError',
+    SET_CURRENT_TOPIC = 'setCurrentTopic',
+    SET_RSS_DATA = 'setRssData',
+    SET_RSS_ERROR = 'setRssError',
 }
