@@ -1,3 +1,3 @@
 export * from './GoogleNews';
 export * from './NewsStroy';
-export * from './tab-bar/NewsTab';
+export * from './tab-bar/NewsTabs';

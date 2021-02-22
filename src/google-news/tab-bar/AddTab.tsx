@@ -66,6 +66,7 @@ export function AddTab() {
                     show: !inputHidden,
                 })}
                 type="text"
+                placeholder="News Topic"
             />
             <div
                 className={cx('circle', 'add', {

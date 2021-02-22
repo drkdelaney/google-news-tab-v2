@@ -4,15 +4,15 @@
     font-family: 'Roboto';
     font-size: 0.8125rem;
     height: 48px;
-    margin: 0 5px;
+    margin: 0 10px;
     position: relative;
 }
 
 .input {
     border: none;
-    border-bottom: 2px solid #40a9ff;
-    outline: none;
     font-size: inherit;
+    outline: none;
+    opacity: 0.7;
     width: 0;
 }
 
@@ -30,11 +30,12 @@
     border-radius: 50%;
     color: white;
     cursor: pointer;
-    height: 16px;
-    line-height: 16px;
+    font-size: 20px;
+    height: 20px;
+    line-height: 19px;
     opacity: 0.7;
     text-align: center;
-    width: 16px;
+    width: 20px;
 }
 
 .circle:hover {
