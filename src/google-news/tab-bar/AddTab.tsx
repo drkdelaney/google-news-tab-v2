@@ -34,6 +34,8 @@ export function AddTab(props: AddTabProps) {
             setInputHidden(false);
             setTimeout(() => {
                 inputRef.current?.focus();
+            });
+            setTimeout(() => {
                 setDoneHidden(false);
                 setInputFinished(true);
             }, 500);

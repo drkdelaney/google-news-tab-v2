@@ -16,7 +16,7 @@ const TabsContainer = styled.div`
 `;
 
 const SelectedBar = styled.span<SelectBarProps>`
-    background-color: #4285f4;
+    background-color: var(--blue);
     height: 2px;
     bottom: 0;
     position: absolute;

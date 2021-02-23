@@ -32,7 +32,7 @@ const StyledButton = styled.button`
     white-space: nowrap;
 
     &:hover {
-        color: #4285f4;
+        color: var(--blue);
         opacity: 1;
     }
 

@@ -1,5 +1,8 @@
 :root {
     --logo-margin-top: 56px;
+    --blue: #42a5f5;
+    --green: #66bb6a;
+    --red: #ef5350;
 }
 
 body {

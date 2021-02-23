@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppState } from './context/AppContext';
 import { GoogleImage } from './google-doodle';
-import { NewsTabs } from './google-news';
+import { GoogleNews, NewsTabs } from './google-news';
 import { ActionType, Topic } from './models';
 import { SearchBar } from './search-bar';
 import { loadDoodles, loadRSSFeed } from './services';
@@ -57,6 +57,7 @@ function Main() {
             <GoogleImage></GoogleImage>
             <SearchBar></SearchBar>
             <NewsTabs></NewsTabs>
+            <GoogleNews></GoogleNews>
         </>
     );
 }
