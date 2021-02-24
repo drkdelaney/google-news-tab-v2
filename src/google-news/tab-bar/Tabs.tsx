@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Map } from 'immutable';
 
 interface TabsProps {
-    selectedIndex: number;
+    selectedKey: string;
     count: number;
     children: JSX.Element[];
 }
@@ -12,14 +13,13 @@ interface SelectBarProps {
     width?: number;
 }
 
-const TabsContainer = styled.div<{ count: number }>`
+const TabsContainer = styled.div<{ width: number }>`
     align-items: center;
     border-bottom: 1px solid #e8e8e8;
     display: flex;
     justify-content: center;
     position: relative;
-    width: 100%;
-    overflow: auto;
+    width: ${(props) => props.width}px;
 `;
 
 const SelectedBar = styled.span<SelectBarProps>`
@@ -32,31 +32,57 @@ const SelectedBar = styled.span<SelectBarProps>`
     left: ${(props) => (props.left ? `${props.left}px` : 0)};
 `;
 
+const initialState = Map<string | number, DOMRect>();
+
+function reducer(
+    state: Map<string | number, DOMRect>,
+    action: { key: string | number; value: DOMRect }
+) {
+    return state.set(action.key, action.value);
+}
+
 export function Tabs(props: TabsProps) {
     const containerRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-    const tabRef = useRef() as React.MutableRefObject<HTMLButtonElement>;
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [left, setLeft] = useState(0);
-    const [width, setWidth] = useState(0);
+    const [barWidth, setBarWidth] = useState(0);
+    const [totalWidth, setTotalWidth] = useState(0);
 
     useEffect(() => {
-        const containerRect = containerRef.current?.getBoundingClientRect();
-        const tabRect = tabRef?.current?.getBoundingClientRect();
-        const left = (tabRect?.left ?? 0) - (containerRect?.left ?? 0);
-        const width = tabRect?.width;
-        setLeft(left);
-        setWidth(width);
-    }, [props.selectedIndex]);
+        const tabRect = state.get(props.selectedKey);
+        setLeft(tabRect?.left ?? 0);
+        setBarWidth(tabRect?.width ?? 0);
+    }, [props.selectedKey]);
 
-    const children = React.Children.map(props.children, (child, i) => {
+    useEffect(() => {
+        const total = state.reduce<number>(
+            (total: number, value: DOMRect) => total + value.width,
+            0
+        );
+        setTotalWidth(total);
+    }, [state]);
+
+    function setRef(ref: HTMLButtonElement, key: string | number | null) {
+        if (ref && key && !state.has(key)) {
+            const rect = ref.getBoundingClientRect();
+            dispatch({ key, value: rect });
+        }
+    }
+
+    console.log(totalWidth);
+
+    const children = React.Children.map(props.children, (child) => {
         return React.cloneElement(child, {
-            ref: props.selectedIndex === i ? tabRef : null,
+            ref: (ref: HTMLButtonElement) => {
+                setRef(ref, child.key);
+            },
         });
     });
 
     return (
-        <TabsContainer ref={containerRef} count={props.count}>
+        <TabsContainer ref={containerRef} width={totalWidth}>
             {children}
-            <SelectedBar left={left} width={width} />
+            <SelectedBar left={left} width={barWidth} />
         </TabsContainer>
     );
 }

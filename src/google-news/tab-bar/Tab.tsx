@@ -19,14 +19,11 @@ const StyledButton = styled.button`
     letter-spacing: 0.02857em;
     margin: 0;
     height: 48px;
-    min-width: 72px;
     opacity: 0.7;
     outline: none;
-    overflow: hidden;
     padding: 6px 12px;
     text-align: center;
     text-decoration: none;
-    text-overflow: ellipsis;
     text-transform: none;
     user-select: none;
     white-space: nowrap;

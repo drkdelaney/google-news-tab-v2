@@ -23,12 +23,12 @@ const AddTabContainer = styled.div<{ offset: number }>`
 export function NewsTabs() {
     const { topics } = useAppState();
     const dispatch = useAppDispatch();
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedKey, setSelectedIndex] = useState('');
     const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
-    function updateSelection(topic: Topic, index: number) {
-        setSelectedIndex(index);
+    function updateSelection(topic: Topic) {
+        setSelectedIndex(topic.id);
         dispatch({
             type: ActionType.SET_CURRENT_TOPIC,
             topic,
@@ -40,21 +40,21 @@ export function NewsTabs() {
     }, []);
 
     useEffect(() => {
-        const rowRight = rowRef.current.getBoundingClientRect().right;
+        const rowRight = rowRef.current.getBoundingClientRect().toJSON().right;
         setTabOffset(rowRight);
     }, [topics]);
 
     return (
         <Container>
             <Row ref={rowRef}>
-                <Tabs selectedIndex={selectedIndex} count={topics.length}>
+                <Tabs selectedKey={selectedKey} count={topics.length}>
                     {topics.map((topic: Topic, i: number) => {
                         return (
                             <Tab
                                 key={topic.id}
                                 label={topic.value}
                                 onClick={() => {
-                                    updateSelection(topics[i], i);
+                                    updateSelection(topics[i]);
                                 }}
                             />
                         );
@@ -65,7 +65,7 @@ export function NewsTabs() {
                 <AddTab
                     key="addTabKey"
                     onTabAdded={(topic: Topic) => {
-                        updateSelection(topic, topics.length);
+                        updateSelection(topic);
                     }}
                 />
             </AddTabContainer>
