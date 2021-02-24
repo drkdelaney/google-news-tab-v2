@@ -4,6 +4,8 @@
     --duration: 1.4s;
 }
 
+/* Loading CSS */
+
 .spinner {
     animation: rotator var(--duration) linear infinite;
 }
@@ -37,4 +39,142 @@
         stroke-dashoffset: var(--offset);
         transform: rotate(450deg);
     }
+}
+
+/* NewsStory CSS */
+
+.googleNewsContainer {
+    width: 700px;
+    margin: auto;
+    color: #202124;
+}
+
+.googleNewsContainer h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: 'Google Sans Display', sans-serif;
+}
+
+.googleNewsContainer h2 a {
+    color: inherit;
+}
+
+.newsStoryContainer {
+    position: relative;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    margin: 12px;
+    padding-right: 166px;
+    min-height: 182px;
+}
+
+.newsStoryContainer > img {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    bottom: auto;
+    left: auto;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.newsStoryContainer.noImage {
+    padding-right: 0;
+    min-height: auto;
+}
+
+ol,
+ul {
+    list-style-type: none;
+    color: rgb(32, 33, 36);
+    padding: 0;
+    margin: 0;
+}
+
+ol,
+ul > a {
+    color: rgb(32, 33, 36);
+    font-size: 12px;
+    display: block;
+}
+
+li {
+    position: relative;
+    display: block;
+    padding: 12px 32px 0;
+}
+
+li:first-child {
+    margin-left: -1rem;
+}
+
+li:last-child {
+    margin-bottom: 12px;
+}
+
+li:first-child > a {
+    font-size: 18px;
+}
+
+li > a {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #202124;
+    font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-weight: 500;
+}
+
+li:first-child > a:before {
+    display: none;
+    font-size: 1.2rem;
+    margin-left: -2rem;
+}
+
+li > a:before {
+    position: absolute;
+    top: 20px;
+    right: auto;
+    bottom: auto;
+    left: 20px;
+    z-index: 1;
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background: #4285f4;
+}
+
+li > strong:before {
+    position: absolute;
+    top: 20px;
+    right: auto;
+    bottom: auto;
+    left: 20px;
+    z-index: 1;
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-image: url(https://lh3.googleusercontent.com/JDFOyo903E9WGstK0YhI2ZFOKR3h4qDxBngX5M8XJVBZFKzOBoxLmk3OVlgNw9SOE-HfkNgb=w48);
+    background-size: 16px 16px;
+}
+
+li > strong {
+    display: inline-block;
+    font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    color: #4285f4;
+    margin: 4px 12px;
+    padding: 0;
+}
+
+a:hover {
+    text-decoration: underline;
 }

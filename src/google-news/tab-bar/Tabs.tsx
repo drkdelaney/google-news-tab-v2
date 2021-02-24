@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface TabsProps {
     selectedIndex: number;
+    count: number;
     children: JSX.Element[];
 }
 
@@ -11,8 +12,14 @@ interface SelectBarProps {
     width?: number;
 }
 
-const TabsContainer = styled.div`
+const TabsContainer = styled.div<{ count: number }>`
+    align-items: center;
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: center;
     position: relative;
+    width: 100%;
+    overflow: auto;
 `;
 
 const SelectedBar = styled.span<SelectBarProps>`
@@ -47,7 +54,7 @@ export function Tabs(props: TabsProps) {
     });
 
     return (
-        <TabsContainer ref={containerRef}>
+        <TabsContainer ref={containerRef} count={props.count}>
             {children}
             <SelectedBar left={left} width={width} />
         </TabsContainer>

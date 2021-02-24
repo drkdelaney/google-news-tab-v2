@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import './styles.css';
 
 interface NewsStoryProps {
     content: string;
@@ -13,7 +14,7 @@ export function NewsStory(props: NewsStoryProps) {
     const { content, enclosure, link, title } = props;
     const newStoryClasses = classnames({
         newsStoryContainer: true,
-        noImage: !enclosure.link,
+        noImage: !enclosure?.link,
     });
     if (!content.startsWith('<ol>') && !content.endsWith('</ol>')) {
         const [titleText, subtitle] = title.split(' - ');
