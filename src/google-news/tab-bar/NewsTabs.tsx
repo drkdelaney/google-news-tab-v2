@@ -10,7 +10,6 @@ const Container = styled.div`
 
 const Row = styled.div`
     margin: 0 auto;
-    overflow: auto;
     width: 700px;
 `;
 
@@ -23,12 +22,12 @@ const AddTabContainer = styled.div<{ offset: number }>`
 export function NewsTabs() {
     const { topics } = useAppState();
     const dispatch = useAppDispatch();
-    const [selectedKey, setSelectedIndex] = useState('');
+    const [selectedKey, setSelectedKey] = useState('');
     const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
     function updateSelection(topic: Topic) {
-        setSelectedIndex(topic.id);
+        setSelectedKey(topic.id);
         dispatch({
             type: ActionType.SET_CURRENT_TOPIC,
             topic,
@@ -37,6 +36,7 @@ export function NewsTabs() {
 
     useEffect(() => {
         dispatch({ type: ActionType.SET_CURRENT_TOPIC, topic: topics[0] });
+        setSelectedKey(topics[0].id);
     }, []);
 
     useEffect(() => {

@@ -170,7 +170,7 @@ li > strong {
     font-size: 14px;
     font-weight: 500;
     white-space: nowrap;
-    color: #4285f4;
+    color: var(--blue);
     margin: 4px 12px;
     padding: 0;
 }
