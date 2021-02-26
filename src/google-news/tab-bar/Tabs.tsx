@@ -1,12 +1,13 @@
 import React, {
+    useCallback,
     useEffect,
-    useLayoutEffect,
     useReducer,
     useRef,
     useState,
 } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Map } from 'immutable';
+import debounce from 'debounce';
 
 interface TabsProps {
     children: JSX.Element[];
@@ -88,16 +89,19 @@ function reducer(
 }
 
 export function Tabs(props: TabsProps) {
+    const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const containerRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [left, setLeft] = useState(0);
+    const [selectedBarLeft, setSelectedBarLeft] = useState(0);
     const [barWidth, setBarWidth] = useState(0);
     const [totalWidth, setTotalWidth] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [atRight, setAtRight] = useState(false);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const tabRect = state.get(props.selectedKey);
-        const leftOffset = containerRef.current.getBoundingClientRect().left;
-        setLeft((tabRect?.left ?? 0) - leftOffset);
+        const leftOffset = rowRef.current.getBoundingClientRect().left;
+        setSelectedBarLeft((tabRect?.left ?? 0) - leftOffset);
         setBarWidth(tabRect?.width ?? 0);
     }, [props.selectedKey]);
 
@@ -110,10 +114,12 @@ export function Tabs(props: TabsProps) {
     }, [state]);
 
     useEffect(() => {
-        containerRef.current.scrollLeft = 0;
-    }, []);
+        const inner = rowRef.current.getBoundingClientRect().width;
+        const right = totalWidth - scrollLeft - inner;
+        setAtRight(right > -5 && right < 5);
+    }, [scrollLeft, totalWidth]);
 
-    function setRef(ref: HTMLButtonElement, key: string | number | null) {
+    function setRef(key: string | number | null, ref: HTMLButtonElement) {
         if (ref && key && !state.has(key)) {
             const rect = ref.getBoundingClientRect();
             dispatch({ key, value: rect });
@@ -123,36 +129,46 @@ export function Tabs(props: TabsProps) {
     const children = React.Children.map(props.children, (child) => {
         return React.cloneElement(child, {
             ref: (ref: HTMLButtonElement) => {
-                setRef(ref, child.key);
+                setRef(child.key, ref);
             },
         });
     });
 
+    const delayedSet = useCallback(
+        debounce((data: number) => setScrollLeft(data), 250),
+        []
+    );
+
+    function handleScroll(event: React.UIEvent<HTMLDivElement, UIEvent>) {
+        const target = event.target as HTMLDivElement;
+        delayedSet(target.scrollLeft);
+    }
+
     return (
-        <TabsContainer>
+        <TabsContainer ref={containerRef}>
             <MoveButton
                 onClick={() => {
-                    containerRef.current.scrollTo({
+                    rowRef.current.scrollTo({
                         left: 0,
                         behavior: 'smooth',
                     });
                 }}
             >
-                <LeftArrow />
+                {scrollLeft > 0 && <LeftArrow />}
             </MoveButton>
-            <TabsRow ref={containerRef} width={totalWidth}>
+            <TabsRow ref={rowRef} width={totalWidth} onScroll={handleScroll}>
                 {children}
-                <SelectedBar left={left} width={barWidth} />
+                <SelectedBar left={selectedBarLeft} width={barWidth} />
             </TabsRow>
             <MoveButton
                 onClick={() => {
-                    containerRef.current.scrollTo({
+                    rowRef.current.scrollTo({
                         left: totalWidth,
                         behavior: 'smooth',
                     });
                 }}
             >
-                <RightArrow />
+                {!atRight && <RightArrow />}
             </MoveButton>
         </TabsContainer>
     );
