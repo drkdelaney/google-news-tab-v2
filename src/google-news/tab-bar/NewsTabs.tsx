@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppState } from '../../context/AppContext';
 import { ActionType, Topic } from '../../models';
-import { Tab, AddTab, Tabs } from '.';
+import { AddTab } from '.';
+import { Tabs, Tab, withStyles } from '@material-ui/core';
 
 const Container = styled.div`
     position: relative;
@@ -19,15 +20,50 @@ const AddTabContainer = styled.div<{ offset: number }>`
     top: 0;
 `;
 
+const StyledTabs = withStyles({
+    root: {
+        borderBottom: '1px solid #e8e8e8',
+        zIndex: 2,
+        backgroundColor: '#fff',
+        margin: 12,
+    },
+    indicator: {
+        backgroundColor: '#1890ff',
+    },
+})(Tabs);
+
+interface StyledTabProps {
+    label: string;
+}
+const StyledTab = withStyles((theme) => ({
+    root: {
+        textTransform: 'none',
+        minWidth: 72,
+        fontWeight: theme.typography.fontWeightRegular,
+        '&:hover': {
+            color: '#40a9ff',
+            opacity: 1,
+        },
+        '&:selected': {
+            color: '#1890ff',
+            fontWeight: theme.typography.fontWeightMedium,
+        },
+        '&:focus': {
+            color: '#40a9ff',
+            backgroundColor: 'transparent',
+        },
+    },
+}))((props: StyledTabProps) => <Tab disableRipple {...props} />);
+
 export function NewsTabs() {
     const { topics } = useAppState();
     const dispatch = useAppDispatch();
-    const [selectedKey, setSelectedKey] = useState('');
+    const [selectedKey, setSelectedKey] = useState(0);
     const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
     function updateSelection(topic: Topic) {
-        setSelectedKey(topic.id);
+        setSelectedKey(topics.length);
         dispatch({
             type: ActionType.SET_CURRENT_TOPIC,
             topic,
@@ -36,7 +72,6 @@ export function NewsTabs() {
 
     useEffect(() => {
         dispatch({ type: ActionType.SET_CURRENT_TOPIC, topic: topics[0] });
-        setSelectedKey(topics[0].id);
     }, []);
 
     useEffect(() => {
@@ -44,22 +79,22 @@ export function NewsTabs() {
         setTabOffset(rowRight);
     }, [topics]);
 
+    function handleChange(event: any, tabIndex: number) {
+        setSelectedKey(tabIndex);
+    }
     return (
         <Container>
             <Row ref={rowRef}>
-                <Tabs selectedKey={selectedKey} count={topics.length}>
+                <StyledTabs
+                    value={selectedKey}
+                    onChange={handleChange}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                >
                     {topics.map((topic: Topic, i: number) => {
-                        return (
-                            <Tab
-                                key={topic.id}
-                                label={topic.value}
-                                onClick={() => {
-                                    updateSelection(topics[i]);
-                                }}
-                            />
-                        );
+                        return <StyledTab key={topic.id} label={topic.value} />;
                     })}
-                </Tabs>
+                </StyledTabs>
             </Row>
             <AddTabContainer offset={tabOffset}>
                 <AddTab
