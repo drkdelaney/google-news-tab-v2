@@ -79,19 +79,33 @@ const LeftArrow = styled(Arrow)`
     transform: rotate(-135deg);
 `;
 
+enum Type {
+    RESET = 'reset',
+    DEFAULT = 'default',
+}
+
+type Action =
+    | { type: Type.RESET }
+    | { type: Type.DEFAULT; key: string | number; value: DOMRect };
+
 const initialState = Map<string | number, DOMRect>();
 
-function reducer(
-    state: Map<string | number, DOMRect>,
-    action: { key: string | number; value: DOMRect }
-) {
-    return state.set(action.key, action.value);
+function reducer(state: Map<string | number, DOMRect>, action: Action) {
+    switch (action.type) {
+        case Type.RESET:
+            return initialState;
+        case Type.DEFAULT:
+            return state.set(action.key, action.value);
+        default:
+            throw new Error(`Undefined action type`);
+    }
 }
 
 export function Tabs(props: TabsProps) {
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const containerRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [leftOffset, setLeftOffset] = useState(0);
     const [selectedBarLeft, setSelectedBarLeft] = useState(0);
     const [barWidth, setBarWidth] = useState(0);
     const [totalWidth, setTotalWidth] = useState(0);
@@ -99,11 +113,15 @@ export function Tabs(props: TabsProps) {
     const [atRight, setAtRight] = useState(false);
 
     useEffect(() => {
+        setLeftOffset(rowRef.current.getBoundingClientRect().left);
+    }, []);
+
+    useEffect(() => {
         const tabRect = state.get(props.selectedKey);
-        const leftOffset = rowRef.current.getBoundingClientRect().left;
         setSelectedBarLeft((tabRect?.left ?? 0) - leftOffset);
         setBarWidth(tabRect?.width ?? 0);
-    }, [props.selectedKey]);
+        console.log(leftOffset, tabRect?.left);
+    }, [props.selectedKey, leftOffset]);
 
     useEffect(() => {
         const total = state.reduce<number>(
@@ -111,7 +129,7 @@ export function Tabs(props: TabsProps) {
             0
         );
         setTotalWidth(total);
-    }, [state]);
+    }, [state.size]);
 
     useEffect(() => {
         const inner = rowRef.current.getBoundingClientRect().width;
@@ -122,13 +140,15 @@ export function Tabs(props: TabsProps) {
     function setRef(key: string | number | null, ref: HTMLButtonElement) {
         if (ref && key && !state.has(key)) {
             const rect = ref.getBoundingClientRect();
-            dispatch({ key, value: rect });
+            dispatch({ type: Type.DEFAULT, key, value: rect });
         }
     }
 
     const children = React.Children.map(props.children, (child) => {
+        console.log('children render', child);
         return React.cloneElement(child, {
             ref: (ref: HTMLButtonElement) => {
+                console.log('setting ref', ref);
                 setRef(child.key, ref);
             },
         });
