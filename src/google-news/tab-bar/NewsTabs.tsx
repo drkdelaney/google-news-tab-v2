@@ -37,7 +37,7 @@ interface StyledTabProps {
 }
 const StyledTab = withStyles((theme) => ({
     root: {
-        textTransform: 'none',
+        textTransform: 'capitalize',
         minWidth: 72,
         fontWeight: theme.typography.fontWeightRegular,
         '&:hover': {
