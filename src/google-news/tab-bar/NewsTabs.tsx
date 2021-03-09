@@ -70,18 +70,25 @@ export function NewsTabs() {
         });
     }
 
+    function handleChange(event: any, tabIndex: number) {
+        setSelectedKey(tabIndex);
+    }
+
     useEffect(() => {
         dispatch({ type: ActionType.SET_CURRENT_TOPIC, topic: topics[0] });
     }, []);
 
     useEffect(() => {
-        const rowRight = rowRef.current.getBoundingClientRect().toJSON().right;
-        setTabOffset(rowRight);
-    }, [topics]);
+        function handleResize() {
+            const rowRight = rowRef.current?.getBoundingClientRect().toJSON()
+                .right;
+            setTabOffset(rowRight);
+        }
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
-    function handleChange(event: any, tabIndex: number) {
-        setSelectedKey(tabIndex);
-    }
     return (
         <Container>
             <Row ref={rowRef}>

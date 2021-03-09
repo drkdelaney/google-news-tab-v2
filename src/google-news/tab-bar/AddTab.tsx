@@ -44,12 +44,14 @@ export function AddTab(props: AddTabProps) {
 
     function save() {
         toggleInputs(() => {
-            const topic = new Topic(input);
-            dispatch({
-                type: ActionType.ADD_TOPIC,
-                topic,
-            });
-            if (props.onTabAdded) props.onTabAdded(topic);
+            if (input.replace(/^\s+|\s+$/g, '').length !== 0) {
+                const topic = new Topic(input);
+                dispatch({
+                    type: ActionType.ADD_TOPIC,
+                    topic,
+                });
+                if (props.onTabAdded) props.onTabAdded(topic);
+            }
         });
     }
 
