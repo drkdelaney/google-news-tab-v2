@@ -3,6 +3,29 @@ import cx from 'classnames';
 import './styles.css';
 import { useAppDispatch } from '../../context/AppContext';
 import { ActionType, Topic } from '../../models';
+import styled from 'styled-components';
+
+const Plus = styled.div`
+    display: inline-block;
+    background: linear-gradient(#fff, #fff), linear-gradient(#fff, #fff),
+        transparent;
+    background-position: center;
+    background-size: 50% 2px, 2px 50%;
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+`;
+
+const Check = styled.div`
+    border-bottom: 2px solid white;
+    border-right: 2px solid white;
+    display: block;
+    height: 10px;
+    margin-left: 7px;
+    margin-top: 3px;
+    transform: rotate(45deg);
+    width: 4px;
+`;
 
 interface AddTabProps {
     onTabAdded?: (topic: Topic) => void;
@@ -86,7 +109,7 @@ export function AddTab(props: AddTabProps) {
                     toggleInputs();
                 }}
             >
-                +
+                <Plus />
             </div>
             <div
                 onClick={() => {
@@ -98,7 +121,7 @@ export function AddTab(props: AddTabProps) {
                     doneShow: !doneHidden,
                 })}
             >
-                ✓
+                <Check />
             </div>
         </div>
     );
