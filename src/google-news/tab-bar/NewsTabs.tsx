@@ -70,8 +70,12 @@ export function NewsTabs() {
         });
     }
 
-    function handleChange(event: any, tabIndex: number) {
+    function handleChange(_event: any, tabIndex: number) {
         setSelectedKey(tabIndex);
+        dispatch({
+            type: ActionType.SET_CURRENT_TOPIC,
+            topic: topics[tabIndex],
+        });
     }
 
     useEffect(() => {

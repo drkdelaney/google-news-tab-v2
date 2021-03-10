@@ -1,11 +1,16 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppState } from './context/AppContext';
 import { GoogleImage } from './google-doodle';
 import { GoogleNews, NewsTabs } from './google-news';
 import { ActionType, Topic } from './models';
 import { SearchBar } from './search-bar';
-import { loadDoodles, loadRSSFeed } from './services';
-import { loadCurrentWeather } from './services';
+import {
+    hasCryptoISO,
+    loadDoodles,
+    loadRSSFeed,
+    loadCurrentWeather,
+    loadCryptoData,
+} from './services';
 import Weather from './weather/Weather';
 
 function Main() {
@@ -42,6 +47,24 @@ function Main() {
                         data: news,
                         key: topic.id,
                     });
+                }
+                if (hasCryptoISO(topic.value)) {
+                    try {
+                        const cryptoData = await loadCryptoData(topic.value);
+                        if (cryptoData) {
+                            dispatch({
+                                type: ActionType.SET_CRYPTO_DATA,
+                                cryptoData,
+                            });
+                        }
+                    } catch (error) {
+                        dispatch({
+                            type: ActionType.SET_CRYPTO_DATA_ERROR,
+                            error,
+                        });
+                    }
+                } else {
+                    dispatch({ type: ActionType.RESET_CRYPTO_DATA });
                 }
             } catch (error) {
                 dispatch({ type: ActionType.SET_RSS_ERROR, error });

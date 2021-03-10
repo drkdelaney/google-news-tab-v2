@@ -1,3 +1,4 @@
+export * from './CryptoService';
 export * from './DoodleService';
 export * from './LocationService';
 export * from './NewsService';

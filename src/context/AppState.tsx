@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { Doodle, Topic, Weather } from '../models';
+import { CryptoData, Doodle, Topic, Weather } from '../models';
 
 export interface AppState {
     weather?: Weather;
@@ -10,6 +10,8 @@ export interface AppState {
     currentTopic?: Topic;
     rssData: Map<string, any>;
     rssError: any;
+    cryptoData?: CryptoData;
+    cryptoDataError: any;
 }
 
 const defaultTopics = [
@@ -34,4 +36,6 @@ export const initialAppState: AppState = {
     currentTopic: undefined,
     rssData: Map(),
     rssError: undefined,
+    cryptoData: undefined,
+    cryptoDataError: undefined,
 };

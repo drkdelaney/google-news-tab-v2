@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NewsStory } from '.';
 import { Loading } from './Loading';
 import styled from 'styled-components';
@@ -17,7 +17,7 @@ const NewsStoryContainer = styled.div`
 `;
 
 export function GoogleNews() {
-    const { currentTopic, rssData } = useAppState();
+    const { currentTopic, rssData, cryptoData } = useAppState();
     const [showLoading, setShowLoading] = useState(true);
 
     useEffect(() => {
@@ -25,6 +25,12 @@ export function GoogleNews() {
             currentTopic && rssData.get(currentTopic.id)?.length > 0;
         setShowLoading(!hasData);
     }, [rssData, currentTopic]);
+
+    const number = cryptoData?.entries[cryptoData?.entries.length - 1][1] ?? 0;
+    const cost = Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(number);
 
     return (
         <Center>
@@ -35,6 +41,7 @@ export function GoogleNews() {
             )}
             {!showLoading && (
                 <NewsStoryContainer>
+                    {cryptoData && <div>{cost}</div>}
                     {currentTopic &&
                         rssData
                             .get(currentTopic.id)

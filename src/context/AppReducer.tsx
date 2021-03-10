@@ -52,6 +52,24 @@ export function appReducer(state: AppState, action: Action): AppState {
                 rssError: action.error,
             };
         }
+        case ActionType.SET_CRYPTO_DATA: {
+            return {
+                ...state,
+                cryptoData: action.cryptoData,
+            };
+        }
+        case ActionType.SET_CRYPTO_DATA_ERROR: {
+            return {
+                ...state,
+                cryptoDataError: action.error,
+            };
+        }
+        case ActionType.RESET_CRYPTO_DATA: {
+            return {
+                ...state,
+                cryptoData: undefined,
+            };
+        }
         default: {
             throw new Error(`Undefined action type`);
         }
