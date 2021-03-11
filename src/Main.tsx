@@ -39,6 +39,7 @@ function Main() {
     }, []);
     useEffect(() => {
         const loadRSS = async (topic: Topic) => {
+            dispatch({ type: ActionType.RESET_CRYPTO_DATA });
             try {
                 const news = await loadRSSFeed(topic);
                 if (news) {
@@ -63,8 +64,6 @@ function Main() {
                             error,
                         });
                     }
-                } else {
-                    dispatch({ type: ActionType.RESET_CRYPTO_DATA });
                 }
             } catch (error) {
                 dispatch({ type: ActionType.SET_RSS_ERROR, error });

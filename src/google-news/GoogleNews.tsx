@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NewsStory } from '.';
 import { Loading } from './Loading';
+import { CryptoResult } from '../crypto/CryptoData';
 import styled from 'styled-components';
 import { useAppState } from '../context/AppContext';
 
@@ -26,12 +27,6 @@ export function GoogleNews() {
         setShowLoading(!hasData);
     }, [rssData, currentTopic]);
 
-    const number = cryptoData?.entries[cryptoData?.entries.length - 1][1] ?? 0;
-    const cost = Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    }).format(number);
-
     return (
         <Center>
             {showLoading && (
@@ -41,7 +36,7 @@ export function GoogleNews() {
             )}
             {!showLoading && (
                 <NewsStoryContainer>
-                    {cryptoData && <div>{cost}</div>}
+                    {cryptoData && <CryptoResult />}
                     {currentTopic &&
                         rssData
                             .get(currentTopic.id)
