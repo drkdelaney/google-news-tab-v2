@@ -17,6 +17,6 @@ export class Topic {
     constructor(v: string, q?: string) {
         this.id = shortid.generate();
         this.value = v;
-        this.query = q ?? v;
+        this.query = q ?? encodeURI(v.toLowerCase());
     }
 }

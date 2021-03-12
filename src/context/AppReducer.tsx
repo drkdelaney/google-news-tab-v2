@@ -1,4 +1,5 @@
 import { ActionType } from '../models';
+import { saveTopics } from '../services/StorageService';
 import { AppState } from './AppState';
 import { Action } from './AppTypes';
 
@@ -29,9 +30,11 @@ export function appReducer(state: AppState, action: Action): AppState {
             };
         }
         case ActionType.ADD_TOPIC: {
+            const topics = [...state.topics, action.topic];
+            saveTopics(topics);
             return {
                 ...state,
-                topics: [...state.topics, action.topic],
+                topics,
             };
         }
         case ActionType.SET_CURRENT_TOPIC: {
@@ -68,6 +71,19 @@ export function appReducer(state: AppState, action: Action): AppState {
             return {
                 ...state,
                 cryptoData: undefined,
+            };
+        }
+        case ActionType.SET_TOPICS: {
+            saveTopics(action.topics);
+            return {
+                ...state,
+                topics: action.topics,
+            };
+        }
+        case ActionType.SET_CRYPTO_FREQUENCY: {
+            return {
+                ...state,
+                cryptoFrequency: action.frequency,
             };
         }
         default: {

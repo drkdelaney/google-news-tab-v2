@@ -13,13 +13,39 @@ export function hasCryptoISO(search: string): boolean {
     return search.toUpperCase() in cryptoObject;
 }
 
-export async function loadCryptoData(search: string): Promise<CryptoData> {
+function frequencyDuration(frequency: string) {
+    switch (frequency) {
+        case '1H':
+            return { hour: 1 };
+        case '12H':
+            return { hour: 12 };
+        case '1D':
+            return { days: 1 };
+        case '1W':
+            return { weeks: 1 };
+        case '1M':
+            return { months: 1 };
+        case '3M':
+            return { months: 3 };
+        case '1Y':
+            return { years: 1 };
+        case 'ALL':
+            return { years: 10 };
+        default:
+            return { days: 1 };
+    }
+}
+
+export async function loadCryptoData(
+    search: string,
+    frequency: string
+): Promise<CryptoData> {
     const cryptoObject = CryptoISOMap as json;
     const cryptoISO = cryptoObject[search.toUpperCase()];
     const url = new URL(`${coinDeskUrl}/${cryptoISO}`);
     const now = DateTime.utc();
     const startDate = now
-        .minus({ days: 1 })
+        .minus(frequencyDuration(frequency))
         .set({ second: 0, millisecond: 0 })
         .toISO({
             suppressSeconds: true,

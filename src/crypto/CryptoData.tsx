@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Chart from 'react-google-charts';
 import styled from 'styled-components';
-import { useAppState } from '../context/AppContext';
+import { useAppDispatch, useAppState } from '../context/AppContext';
+import { ActionType } from '../models';
+import { frequencies } from '../util/Frequencies';
 
 const ResultContainer = styled.div`
     border-radius: 12px;
@@ -37,6 +39,12 @@ const Top = styled.div`
 
 const Price = styled.div`
     font-size: 24px;
+
+    & .diff {
+        color: #888888;
+        font-size: 18px;
+        margin-left: 12px;
+    }
 `;
 
 const Period = styled.span<{ selected: boolean }>`
@@ -46,13 +54,11 @@ const Period = styled.span<{ selected: boolean }>`
     font-size: 12px;
 `;
 
-const Disclamer = styled.div`
+const Disclaimer = styled.div`
     font-size: 10px;
     text-align: right;
     padding: 5px 10px;
 `;
-
-const frequencies = ['1H', '12H', '1D', '1W', '1M', '3M', '1Y', 'ALL'];
 
 function formatCurrency(number: number): string {
     return Intl.NumberFormat('en-US', {
@@ -61,11 +67,17 @@ function formatCurrency(number: number): string {
     }).format(number);
 }
 
+function calculatePercentDiff(a: number, b: number): number {
+    const percent = ((a - b) / a) * 100;
+    return Math.round(percent * 100) / 100;
+}
+
 export function CryptoResult() {
-    const { cryptoData } = useAppState();
-    const [periodIndex, setPeriodIndex] = useState(2);
-    const latest = cryptoData?.entries[cryptoData?.entries.length - 1][1] ?? 0;
-    const cost = formatCurrency(latest);
+    const { cryptoData, cryptoFrequency } = useAppState();
+    const dispatch = useAppDispatch();
+    const last = cryptoData?.entries[cryptoData?.entries.length - 1][1] ?? 0;
+    const first = cryptoData?.entries[0][1] ?? 0;
+    const cost = formatCurrency(last);
 
     function formatChartData() {
         if (cryptoData) {
@@ -104,6 +116,7 @@ export function CryptoResult() {
         },
     };
 
+    const diff = calculatePercentDiff(last, first);
     return (
         <>
             <Title
@@ -115,13 +128,24 @@ export function CryptoResult() {
             </Title>
             <ResultContainer>
                 <Top>
-                    <Price>{cost}</Price>
+                    <Price>
+                        {cost}
+                        <span className="diff">
+                            {diff >= 0 && '+'}
+                            {`${diff}%`}
+                        </span>
+                    </Price>
                     <div>
                         {frequencies.map((frequency, i) => (
                             <Period
                                 key={i}
-                                selected={periodIndex === i}
-                                onClick={() => setPeriodIndex(i)}
+                                selected={cryptoFrequency === frequency}
+                                onClick={() => {
+                                    dispatch({
+                                        type: ActionType.SET_CRYPTO_FREQUENCY,
+                                        frequency,
+                                    });
+                                }}
                             >
                                 {frequency}
                             </Period>
@@ -133,10 +157,10 @@ export function CryptoResult() {
                     data={formatChartData()}
                     options={chartOptions}
                     legendToggle={false}
-                ></Chart>
-                <Disclamer>
+                />
+                <Disclaimer>
                     Powered by <a href="https://www.coindesk.com/">CoinDesk</a>
-                </Disclamer>
+                </Disclaimer>
             </ResultContainer>
         </>
     );

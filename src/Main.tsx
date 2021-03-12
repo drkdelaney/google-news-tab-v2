@@ -11,13 +11,22 @@ import {
     loadCurrentWeather,
     loadCryptoData,
 } from './services';
+import { loadTopics, saveTopics } from './services/StorageService';
+import { defaultTopics } from './util/DefaultTopics';
+import { DEFAULT_FREQUENCY } from './util/Frequencies';
 import Weather from './weather/Weather';
 
 function Main() {
     const dispatch = useAppDispatch();
-    const { currentTopic } = useAppState();
+    const { currentTopic, cryptoFrequency } = useAppState();
     useEffect(() => {
         const init = async () => {
+            let topics = loadTopics();
+            if (topics.length === 0) {
+                topics = defaultTopics;
+            }
+            dispatch({ type: ActionType.SET_TOPICS, topics });
+            dispatch({ type: ActionType.SET_CURRENT_TOPIC, topic: topics[0] });
             try {
                 const weather = await loadCurrentWeather();
                 if (weather) {
@@ -39,7 +48,7 @@ function Main() {
     }, []);
     useEffect(() => {
         const loadRSS = async (topic: Topic) => {
-            dispatch({ type: ActionType.RESET_CRYPTO_DATA });
+            dispatch({ type: ActionType.RESET_CRYPTO_DATA }); // Reset crypto data when topic changes
             try {
                 const news = await loadRSSFeed(topic);
                 if (news) {
@@ -49,22 +58,6 @@ function Main() {
                         key: topic.id,
                     });
                 }
-                if (hasCryptoISO(topic.value)) {
-                    try {
-                        const cryptoData = await loadCryptoData(topic.value);
-                        if (cryptoData) {
-                            dispatch({
-                                type: ActionType.SET_CRYPTO_DATA,
-                                cryptoData,
-                            });
-                        }
-                    } catch (error) {
-                        dispatch({
-                            type: ActionType.SET_CRYPTO_DATA_ERROR,
-                            error,
-                        });
-                    }
-                }
             } catch (error) {
                 dispatch({ type: ActionType.SET_RSS_ERROR, error });
             }
@@ -73,6 +66,32 @@ function Main() {
             loadRSS(currentTopic);
         }
     }, [currentTopic]);
+    useEffect(() => {
+        const loadCrypto = async (topic: Topic, frequency: string) => {
+            if (hasCryptoISO(topic.value)) {
+                try {
+                    const cryptoData = await loadCryptoData(
+                        topic.value,
+                        frequency
+                    );
+                    if (cryptoData) {
+                        dispatch({
+                            type: ActionType.SET_CRYPTO_DATA,
+                            cryptoData,
+                        });
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: ActionType.SET_CRYPTO_DATA_ERROR,
+                        error,
+                    });
+                }
+            }
+        };
+        if (currentTopic && cryptoFrequency) {
+            loadCrypto(currentTopic, cryptoFrequency);
+        }
+    }, [cryptoFrequency, currentTopic]);
     return (
         <>
             <Weather></Weather>

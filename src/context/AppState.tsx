@@ -1,5 +1,6 @@
 import { Map } from 'immutable';
 import { CryptoData, Doodle, Topic, Weather } from '../models';
+import { DEFAULT_FREQUENCY } from '../util/Frequencies';
 
 export interface AppState {
     weather?: Weather;
@@ -12,30 +13,19 @@ export interface AppState {
     rssError: any;
     cryptoData?: CryptoData;
     cryptoDataError: any;
+    cryptoFrequency: string;
 }
-
-const defaultTopics = [
-    new Topic('Top News', 'TOP_NEWS'),
-    new Topic('U.S.', 'NATION'),
-    new Topic('World', 'WORLD'),
-    new Topic('Local', 'LOCAL'),
-    new Topic('Business', 'BUSINESS'),
-    new Topic('Technology', 'TECHNOLOGY'),
-    new Topic('Entertainment', 'ENTERTAINMENT'),
-    new Topic('Sports', 'SPORTS'),
-    new Topic('Science', 'SCIENCE'),
-    new Topic('Health', 'HEALTH'),
-];
 
 export const initialAppState: AppState = {
     weather: undefined,
     weatherError: undefined,
     doodles: undefined,
     doodlesError: undefined,
-    topics: defaultTopics,
+    topics: [],
     currentTopic: undefined,
     rssData: Map(),
     rssError: undefined,
     cryptoData: undefined,
     cryptoDataError: undefined,
+    cryptoFrequency: DEFAULT_FREQUENCY,
 };

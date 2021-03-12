@@ -79,10 +79,6 @@ export function NewsTabs() {
     }
 
     useEffect(() => {
-        dispatch({ type: ActionType.SET_CURRENT_TOPIC, topic: topics[0] });
-    }, []);
-
-    useEffect(() => {
         function handleResize() {
             const rowRight = rowRef.current?.getBoundingClientRect().toJSON()
                 .right;

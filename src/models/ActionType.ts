@@ -3,6 +3,7 @@ export enum ActionType {
     RESET_CRYPTO_DATA = 'resetCryptoData',
     SET_CRYPTO_DATA = 'setCryptoData',
     SET_CRYPTO_DATA_ERROR = 'setCryptoDataError',
+    SET_CRYPTO_FREQUENCY = 'setCryptoFrequency',
     SET_CURRENT_TOPIC = 'setCurrentTopic',
     SET_CURRENT_WEATHER = 'setCurrentWeather',
     SET_CURRENT_WEATHER_ERROR = 'setCurrentWeatherError',
@@ -10,4 +11,5 @@ export enum ActionType {
     SET_DOODLES_ERROR = 'setDoodlesError',
     SET_RSS_DATA = 'setRssData',
     SET_RSS_ERROR = 'setRssError',
+    SET_TOPICS = 'setTopics',
 }
