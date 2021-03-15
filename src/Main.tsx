@@ -11,9 +11,8 @@ import {
     loadCurrentWeather,
     loadCryptoData,
 } from './services';
-import { loadTopics, saveTopics } from './services/StorageService';
+import { loadTopics } from './services/StorageService';
 import { defaultTopics } from './util/DefaultTopics';
-import { DEFAULT_FREQUENCY } from './util/Frequencies';
 import Weather from './weather/Weather';
 
 function Main() {
@@ -45,6 +44,7 @@ function Main() {
             }
         };
         init();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         const loadRSS = async (topic: Topic) => {
@@ -65,6 +65,7 @@ function Main() {
         if (currentTopic) {
             loadRSS(currentTopic);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTopic]);
     useEffect(() => {
         const loadCrypto = async (topic: Topic, frequency: string) => {
@@ -91,6 +92,7 @@ function Main() {
         if (currentTopic && cryptoFrequency) {
             loadCrypto(currentTopic, cryptoFrequency);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cryptoFrequency, currentTopic]);
     return (
         <>

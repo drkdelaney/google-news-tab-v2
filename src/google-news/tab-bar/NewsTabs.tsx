@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppState } from '../../context/AppContext';
 import { ActionType, Topic } from '../../models';
@@ -98,7 +98,7 @@ export function NewsTabs() {
                     variant="scrollable"
                     scrollButtons="auto"
                 >
-                    {topics.map((topic: Topic, i: number) => {
+                    {topics.map((topic: Topic) => {
                         return <StyledTab key={topic.id} label={topic.value} />;
                     })}
                 </StyledTabs>

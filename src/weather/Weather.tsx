@@ -5,15 +5,16 @@ import { getIconInfo } from '../services/LocationService';
 import weatherIcons from './WeatherIcons.json';
 
 const WeatherWrapper = styled.div`
-    position: fixed;
-    display: flex;
-    top: 16px;
-    right: 16px;
-    font-size: 14px;
-    line-height: 1.4;
     color: #202124;
+    display: flex;
     font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    font-size: 14px;
     font-weight: 400;
+    line-height: 1.4;
+    max-width: 300px;
+    position: fixed;
+    right: 16px;
+    top: 16px;
     transition: top 0.3s;
 
     &.offset {
@@ -23,8 +24,9 @@ const WeatherWrapper = styled.div`
 `;
 
 const WeatherIcon = styled.img`
-    width: 50px;
+    height: 50px;
     position: relative;
+    width: 50px;
 `;
 
 const FlexColumn = styled.div`
