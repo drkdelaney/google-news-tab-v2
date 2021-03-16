@@ -43,22 +43,6 @@
 
 /* NewsStory CSS */
 
-.googleNewsContainer {
-    width: 700px;
-    margin: auto;
-    color: #202124;
-}
-
-.googleNewsContainer h2 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    font-family: 'Google Sans Display', sans-serif;
-}
-
-.googleNewsContainer h2 a {
-    color: inherit;
-}
-
 .newsStoryContainer {
     position: relative;
     border: 1px solid #dadce0;
@@ -87,54 +71,55 @@
     min-height: auto;
 }
 
-ol,
-ul {
+.newsStoryContainer ol,
+.newsStoryContainer ul {
     list-style-type: none;
     color: rgb(32, 33, 36);
     padding: 0;
     margin: 0;
 }
 
-ol,
-ul > a {
+.newsStoryContainer ol,
+.newsStoryContainer ul > a {
     color: rgb(32, 33, 36);
     font-size: 12px;
     display: block;
 }
 
-li {
+.newsStoryContainer li {
     position: relative;
     display: block;
     padding: 12px 32px 0;
 }
 
-li:first-child {
+.newsStoryContainer li:first-child {
     margin-left: -1rem;
 }
 
-li:last-child {
+.newsStoryContainer li:last-child {
     margin-bottom: 12px;
 }
 
-li:first-child > a {
+.newsStoryContainer li:first-child > a {
     font-size: 18px;
 }
 
-li > a {
+.newsStoryContainer li > a {
     font-size: 14px;
     line-height: 1.4;
     color: #202124;
     font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     font-weight: 500;
+    text-decoration: none;
 }
 
-li:first-child > a:before {
+.newsStoryContainer li:first-child > a:before {
     display: none;
     font-size: 1.2rem;
     margin-left: -2rem;
 }
 
-li > a:before {
+.newsStoryContainer li > a:before {
     position: absolute;
     top: 20px;
     right: auto;
@@ -149,9 +134,9 @@ li > a:before {
     background: #4285f4;
 }
 
-li > strong:before {
+.newsStoryContainer li > strong:before {
     position: absolute;
-    top: 20px;
+    top: 18px;
     right: auto;
     bottom: auto;
     left: 20px;
@@ -164,7 +149,7 @@ li > strong:before {
     background-size: 16px 16px;
 }
 
-li > strong {
+.newsStoryContainer li > strong > a {
     display: inline-block;
     font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -173,8 +158,9 @@ li > strong {
     color: var(--blue);
     margin: 4px 12px;
     padding: 0;
+    text-decoration: none;
 }
 
-a:hover {
+.newsStoryContainer a:hover {
     text-decoration: underline;
 }

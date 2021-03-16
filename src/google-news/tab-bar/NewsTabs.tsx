@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppState } from '../../context/AppContext';
 import { ActionType, Topic } from '../../models';
@@ -20,6 +20,38 @@ const AddTabContainer = styled.div<{ offset: number }>`
     top: 0;
 `;
 
+interface MenuProps {
+    top?: number;
+    left?: number;
+    open: boolean;
+}
+const Menu = styled.ul<MenuProps>`
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px,
+        rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+        rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+    display: ${(props) => (props.open ? 'inherit' : 'none')};
+    left: ${(props) => props.left ?? 0}px;
+    list-style-type: none;
+    margin: 0;
+    padding: 8px 0;
+    position: fixed;
+    top: ${(props) => props.top ?? 0}px;
+    z-index: 2;
+`;
+const MenuItem = styled.li`
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 6px 16px;
+    &:hover {
+        text-decoration: none;
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+`;
+
 const StyledTabs = withStyles({
     root: {
         borderBottom: '1px solid #e8e8e8',
@@ -34,7 +66,9 @@ const StyledTabs = withStyles({
 
 interface StyledTabProps {
     label: string;
+    onContextMenu: (e: MouseEvent<HTMLDivElement>) => void;
 }
+
 const StyledTab = withStyles((theme) => ({
     root: {
         textTransform: 'capitalize',
@@ -61,6 +95,7 @@ export function NewsTabs() {
     const [selectedKey, setSelectedKey] = useState(0);
     const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+    const [menuRect, setMenu] = useState<DOMRect>();
 
     function updateSelection(topic: Topic) {
         setSelectedKey(topics.length);
@@ -76,6 +111,13 @@ export function NewsTabs() {
             type: ActionType.SET_CURRENT_TOPIC,
             topic: topics[tabIndex],
         });
+    }
+
+    function handleContextMenu(e: MouseEvent<HTMLDivElement>, key: string) {
+        const target = e.target as Element;
+        const rect = target.getBoundingClientRect();
+        setMenu(rect);
+        e.preventDefault();
     }
 
     useEffect(() => {
@@ -99,9 +141,25 @@ export function NewsTabs() {
                     scrollButtons="auto"
                 >
                     {topics.map((topic: Topic) => {
-                        return <StyledTab key={topic.id} label={topic.value} />;
+                        return (
+                            <StyledTab
+                                key={topic.id}
+                                label={topic.value}
+                                onContextMenu={(e) => {
+                                    handleContextMenu(e, topic.id);
+                                }}
+                            />
+                        );
                     })}
                 </StyledTabs>
+                <Menu
+                    open={Boolean(menuRect)}
+                    left={menuRect?.left}
+                    top={menuRect?.top}
+                >
+                    <MenuItem>Edit</MenuItem>
+                    <MenuItem>Delete</MenuItem>
+                </Menu>
             </Row>
             <AddTabContainer offset={tabOffset}>
                 <AddTab
