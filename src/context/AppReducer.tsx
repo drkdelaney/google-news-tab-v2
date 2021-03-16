@@ -86,6 +86,14 @@ export function appReducer(state: AppState, action: Action): AppState {
                 cryptoFrequency: action.frequency,
             };
         }
+        case ActionType.REMOVE_TOPIC: {
+            const topics = state.topics.filter((t) => t.id !== action.key);
+            saveTopics(topics);
+            return {
+                ...state,
+                topics,
+            };
+        }
         default: {
             throw new Error(`Undefined action type`);
         }

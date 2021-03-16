@@ -96,6 +96,7 @@ export function NewsTabs() {
     const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [menuRect, setMenu] = useState<DOMRect>();
+    const [menuKey, setMenuKey] = useState<string>();
 
     function updateSelection(topic: Topic) {
         setSelectedKey(topics.length);
@@ -117,7 +118,19 @@ export function NewsTabs() {
         const target = e.target as Element;
         const rect = target.getBoundingClientRect();
         setMenu(rect);
+        setMenuKey(key);
         e.preventDefault();
+    }
+
+    function handleMenuMove() {
+        console.log(menuKey);
+    }
+
+    function handleMenuDelete() {
+        if (menuKey) {
+            dispatch({ type: ActionType.REMOVE_TOPIC, key: menuKey });
+        }
+        console.log(menuKey);
     }
 
     useEffect(() => {
@@ -129,6 +142,16 @@ export function NewsTabs() {
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        function handleClick() {
+            setMenu(undefined);
+            setMenuKey(undefined);
+        }
+        handleClick();
+        window.addEventListener('click', handleClick);
+        return () => window.removeEventListener('click', handleClick);
     }, []);
 
     return (
@@ -157,8 +180,8 @@ export function NewsTabs() {
                     left={menuRect?.left}
                     top={menuRect?.top}
                 >
-                    <MenuItem>Edit</MenuItem>
-                    <MenuItem>Delete</MenuItem>
+                    <MenuItem onClick={handleMenuMove}>Move</MenuItem>
+                    <MenuItem onClick={handleMenuDelete}>Delete</MenuItem>
                 </Menu>
             </Row>
             <AddTabContainer offset={tabOffset}>

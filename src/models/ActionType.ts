@@ -1,5 +1,6 @@
 export enum ActionType {
     ADD_TOPIC = 'addTopic',
+    REMOVE_TOPIC = 'removeTopic',
     RESET_CRYPTO_DATA = 'resetCryptoData',
     SET_CRYPTO_DATA = 'setCryptoData',
     SET_CRYPTO_DATA_ERROR = 'setCryptoDataError',
