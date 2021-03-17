@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppState } from '../context/AppContext';
-import { useRandomNumber } from '../util/RandomNumber';
+import { getRandomNumber } from '../util/RandomNumber';
 import logo from './google-logo.svg';
 
 const LogoContainer = styled.div`
@@ -24,7 +25,12 @@ const DoodleImg = styled.img`
 
 export function GoogleImage() {
     const { doodles } = useAppState();
-    const random = useRandomNumber(doodles?.length ?? 0);
+    const [random, setRandom] = useState(0);
+    useEffect(() => {
+        if (doodles?.length) {
+            setRandom(getRandomNumber(doodles.length));
+        }
+    }, [doodles]);
 
     return (
         <LogoContainer>
