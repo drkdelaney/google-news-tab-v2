@@ -94,6 +94,12 @@ export function appReducer(state: AppState, action: Action): AppState {
                 topics,
             };
         }
+        case ActionType.OPEN_MODAL: {
+            return {
+                ...state,
+                modalProps: action.data,
+            };
+        }
         default: {
             throw new Error(`Undefined action type`);
         }

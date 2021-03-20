@@ -1,7 +1,15 @@
-import { ActionType, CryptoData, Doodle, Topic, Weather } from '../models';
+import {
+    ActionType,
+    CryptoData,
+    Doodle,
+    ModalProps,
+    Topic,
+    Weather,
+} from '../models';
 
 export type Action =
     | { type: ActionType.ADD_TOPIC; topic: Topic }
+    | { type: ActionType.OPEN_MODAL; data?: ModalProps }
     | { type: ActionType.REMOVE_TOPIC; key: string }
     | { type: ActionType.RESET_CRYPTO_DATA }
     | { type: ActionType.SET_CRYPTO_DATA_ERROR; error: any }

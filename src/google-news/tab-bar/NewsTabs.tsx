@@ -4,6 +4,7 @@ import { useAppDispatch, useAppState } from '../../context/AppContext';
 import { ActionType, Topic } from '../../models';
 import { AddTab } from '.';
 import { Tabs, Tab, withStyles } from '@material-ui/core';
+import { usePrevious } from '../../util/UsePrevious';
 
 const Container = styled.div`
     position: relative;
@@ -92,11 +93,12 @@ const StyledTab = withStyles((theme) => ({
 export function NewsTabs() {
     const { topics } = useAppState();
     const dispatch = useAppDispatch();
+    const previousTopics = usePrevious(topics);
     const [selectedKey, setSelectedKey] = useState(0);
     const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-    const [menuRect, setMenu] = useState<DOMRect>();
-    const [menuKey, setMenuKey] = useState<string>();
+    const [menuRect, setMenuRect] = useState<DOMRect>();
+    const [menuTopic, setMenuTopic] = useState<Topic>();
 
     function updateSelection(topic: Topic) {
         setSelectedKey(topics.length);
@@ -114,25 +116,45 @@ export function NewsTabs() {
         });
     }
 
-    function handleContextMenu(e: MouseEvent<HTMLDivElement>, key: string) {
+    function handleContextMenu(e: MouseEvent<HTMLDivElement>, topic: Topic) {
         const target = e.target as Element;
         const rect = target.getBoundingClientRect();
-        setMenu(rect);
-        setMenuKey(key);
+        setMenuRect(rect);
+        setMenuTopic(topic);
         e.preventDefault();
     }
 
     function handleMenuMove() {
-        console.log(menuKey);
+        console.log(menuTopic);
     }
 
     function handleMenuDelete() {
-        if (menuKey) {
-            dispatch({ type: ActionType.REMOVE_TOPIC, key: menuKey });
+        if (menuTopic) {
+            dispatch({
+                type: ActionType.OPEN_MODAL,
+                data: { topic: menuTopic },
+            });
         }
-        console.log(menuKey);
+        setMenuRect(undefined);
+        setMenuTopic(undefined);
     }
 
+    /**
+     * Handle the scenario where a user deletes the last topic and its selected
+     */
+    useEffect(() => {
+        if (
+            selectedKey >= topics.length &&
+            previousTopics &&
+            topics.length < previousTopics.length
+        ) {
+            handleChange(null, topics.length - 1);
+        }
+    }, [topics]);
+
+    /**
+     * Handle resizing window and set the tab offset.
+     */
     useEffect(() => {
         function handleResize() {
             const rowRight = rowRef.current?.getBoundingClientRect().toJSON()
@@ -144,10 +166,13 @@ export function NewsTabs() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    /**
+     * Handle clicking out side of context menu.
+     */
     useEffect(() => {
         function handleClick() {
-            setMenu(undefined);
-            setMenuKey(undefined);
+            setMenuRect(undefined);
+            setMenuTopic(undefined);
         }
         handleClick();
         window.addEventListener('click', handleClick);
@@ -158,7 +183,11 @@ export function NewsTabs() {
         <Container>
             <Row ref={rowRef}>
                 <StyledTabs
-                    value={selectedKey}
+                    value={
+                        selectedKey > topics.length - 1
+                            ? topics.length - 1
+                            : selectedKey
+                    }
                     onChange={handleChange}
                     variant="scrollable"
                     scrollButtons="auto"
@@ -169,7 +198,7 @@ export function NewsTabs() {
                                 key={topic.id}
                                 label={topic.value}
                                 onContextMenu={(e) => {
-                                    handleContextMenu(e, topic.id);
+                                    handleContextMenu(e, topic);
                                 }}
                             />
                         );

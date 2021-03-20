@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { CryptoData, Doodle, Topic, Weather } from '../models';
+import { CryptoData, Doodle, ModalProps, Topic, Weather } from '../models';
 import { DEFAULT_FREQUENCY } from '../util/Frequencies';
 
 export interface AppState {
@@ -14,6 +14,7 @@ export interface AppState {
     cryptoData?: CryptoData;
     cryptoDataError: any;
     cryptoFrequency: string;
+    modalProps?: ModalProps;
 }
 
 export const initialAppState: AppState = {
@@ -28,4 +29,5 @@ export const initialAppState: AppState = {
     cryptoData: undefined,
     cryptoDataError: undefined,
     cryptoFrequency: DEFAULT_FREQUENCY,
+    modalProps: undefined,
 };
