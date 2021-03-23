@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppState } from './context/AppContext';
 import { GoogleImage } from './google-doodle';
 import { GoogleNews, NewsTabs } from './google-news';
-import { DeleteDialog } from './delete-dialog';
+import { ModalDialog } from './dialogs';
 import { ActionType, Topic } from './models';
 import { SearchBar } from './search-bar';
 import {
@@ -102,7 +102,7 @@ function Main() {
             <SearchBar></SearchBar>
             <NewsTabs></NewsTabs>
             <GoogleNews></GoogleNews>
-            <DeleteDialog></DeleteDialog>
+            <ModalDialog></ModalDialog>
         </>
     );
 }

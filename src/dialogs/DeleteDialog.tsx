@@ -6,11 +6,10 @@ import {
     DialogContentText,
     DialogActions,
     withStyles,
-    Theme,
 } from '@material-ui/core';
 import { red, grey } from '@material-ui/core/colors';
 import { useAppDispatch, useAppState } from '../context/AppContext';
-import { ActionType } from '../models';
+import { ActionType, ModalType } from '../models';
 
 const DeleteButton = withStyles(() => ({
     root: {
@@ -39,21 +38,21 @@ export function DeleteDialog() {
     }
 
     function handleDelete() {
-        if (modalProps) {
+        if (modalProps?.topic) {
             dispatch({
                 type: ActionType.REMOVE_TOPIC,
-                key: modalProps?.topic.id,
+                key: modalProps?.topic?.id,
             });
         }
         handleClose();
     }
 
     return (
-        <Dialog open={Boolean(modalProps)} onClose={handleClose}>
+        <Dialog open={true} onClose={handleClose}>
             <DialogTitle>Are you sure?</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to delete "{modalProps?.topic.value}"
+                    Are you sure you want to delete "{modalProps?.topic?.value}"
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

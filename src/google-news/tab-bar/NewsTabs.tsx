@@ -1,7 +1,7 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppState } from '../../context/AppContext';
-import { ActionType, Topic } from '../../models';
+import { ActionType, ModalType, Topic } from '../../models';
 import { AddTab } from '.';
 import { Tabs, Tab, withStyles } from '@material-ui/core';
 import { usePrevious } from '../../util/UsePrevious';
@@ -108,13 +108,17 @@ export function NewsTabs() {
         });
     }
 
-    function handleChange(_event: any, tabIndex: number) {
-        setSelectedKey(tabIndex);
-        dispatch({
-            type: ActionType.SET_CURRENT_TOPIC,
-            topic: topics[tabIndex],
-        });
-    }
+    const handleChange = useCallback(
+        (_event: any, tabIndex: number) => {
+            setSelectedKey(tabIndex);
+            dispatch({
+                type: ActionType.SET_CURRENT_TOPIC,
+                topic: topics[tabIndex],
+            });
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [topics]
+    );
 
     function handleContextMenu(e: MouseEvent<HTMLDivElement>, topic: Topic) {
         const target = e.target as Element;
@@ -124,15 +128,18 @@ export function NewsTabs() {
         e.preventDefault();
     }
 
-    function handleMenuMove() {
-        console.log(menuTopic);
+    function handleMenuEdit() {
+        dispatch({
+            type: ActionType.OPEN_MODAL,
+            data: { modalType: ModalType.EDIT },
+        });
     }
 
     function handleMenuDelete() {
         if (menuTopic) {
             dispatch({
                 type: ActionType.OPEN_MODAL,
-                data: { topic: menuTopic },
+                data: { topic: menuTopic, modalType: ModalType.DELETE },
             });
         }
         setMenuRect(undefined);
@@ -150,7 +157,7 @@ export function NewsTabs() {
         ) {
             handleChange(null, topics.length - 1);
         }
-    }, [topics]);
+    }, [topics, handleChange, previousTopics, selectedKey]);
 
     /**
      * Handle resizing window and set the tab offset.
@@ -209,7 +216,7 @@ export function NewsTabs() {
                     left={menuRect?.left}
                     top={menuRect?.top}
                 >
-                    <MenuItem onClick={handleMenuMove}>Move</MenuItem>
+                    <MenuItem onClick={handleMenuEdit}>Edit</MenuItem>
                     <MenuItem onClick={handleMenuDelete}>Delete</MenuItem>
                 </Menu>
             </Row>
