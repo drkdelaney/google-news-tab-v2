@@ -147,7 +147,9 @@ export function NewsTabs() {
     }
 
     /**
-     * Handle the scenario where a user deletes the last topic and its selected
+     * Handle the scenario where a user deletes the last topic and its selected.
+     * -- OR --
+     * User edits the order and the selected topic changes.
      */
     useEffect(() => {
         if (
@@ -156,6 +158,13 @@ export function NewsTabs() {
             topics.length < previousTopics.length
         ) {
             handleChange(null, topics.length - 1);
+        }
+        if (
+            previousTopics &&
+            previousTopics.length &&
+            topics[selectedKey].id !== previousTopics[selectedKey].id
+        ) {
+            handleChange(null, selectedKey);
         }
     }, [topics, handleChange, previousTopics, selectedKey]);
 
