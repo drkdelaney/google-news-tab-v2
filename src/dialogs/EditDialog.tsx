@@ -38,7 +38,10 @@ const DraggableListItem = withStyles((theme) => ({
             props.draggingOver ? '3px dashed black' : '',
         boxShadow: 'border-box',
     },
-}))((props: DraggableListItemProps) => <ListItem {...props} />);
+}))((props: DraggableListItemProps) => {
+    const { draggingOver, isDragging, ...rest } = props; // remove unused props
+    return <ListItem {...rest} />;
+});
 
 export function EditDialog() {
     const { topics } = useAppState();
@@ -82,32 +85,30 @@ export function EditDialog() {
                     Drag the topics to reorder.
                 </DialogContentText>
                 <List>
-                    {topics.map((topic, i) => (
-                        <>
-                            <DraggableListItem
-                                key={`list-item-${i}`}
-                                draggable
-                                isDragging={draggedTaskId === i}
-                                draggingOver={dragOverId === i}
-                                onDragStart={(event) => {
-                                    handleDragStart(i, event);
-                                }}
-                                onDragEnd={handleDragEnd}
-                                onDrop={(event) => {
-                                    handleDrop(i, event);
-                                }}
-                                onDragOver={(event) => {
-                                    handleDragOver(i, event);
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <DragIndicator></DragIndicator>
-                                </ListItemIcon>
-                                <ListItemText>{topic.value}</ListItemText>
-                            </DraggableListItem>
-                            <Divider key={`divider-${i}`}></Divider>
-                        </>
-                    ))}
+                    {topics.map((topic, i) => [
+                        <DraggableListItem
+                            key={`list-item-${i}`}
+                            draggable
+                            isDragging={draggedTaskId === i}
+                            draggingOver={dragOverId === i}
+                            onDragStart={(event) => {
+                                handleDragStart(i, event);
+                            }}
+                            onDragEnd={handleDragEnd}
+                            onDrop={(event) => {
+                                handleDrop(i, event);
+                            }}
+                            onDragOver={(event) => {
+                                handleDragOver(i, event);
+                            }}
+                        >
+                            <ListItemIcon>
+                                <DragIndicator></DragIndicator>
+                            </ListItemIcon>
+                            <ListItemText>{topic.value}</ListItemText>
+                        </DraggableListItem>,
+                        <Divider key={`divider-${topic.id}`}></Divider>,
+                    ])}
                 </List>
             </DialogContent>
             <DialogActions>

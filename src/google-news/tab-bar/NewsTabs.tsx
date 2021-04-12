@@ -173,8 +173,7 @@ export function NewsTabs() {
      */
     useEffect(() => {
         function handleResize() {
-            const rowRight = rowRef.current?.getBoundingClientRect().toJSON()
-                .right;
+            const rowRight = rowRef.current?.getBoundingClientRect().right;
             setTabOffset(rowRight);
         }
         handleResize();
