@@ -37,6 +37,7 @@ const DraggableListItem = withStyles((theme) => ({
         border: (props: DraggableListItemProps) =>
             props.draggingOver ? '3px dashed black' : '',
         boxShadow: 'border-box',
+        textTransform: 'capitalize',
     },
 }))((props: DraggableListItemProps) => {
     const { draggingOver, isDragging, ...rest } = props; // remove unused props
