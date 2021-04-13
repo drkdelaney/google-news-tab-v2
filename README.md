@@ -1,4 +1,4 @@
-# NewsTab Chrome Extension.
+# _NewsTab_
 
 A basic new tab page with news under the search bar
 
