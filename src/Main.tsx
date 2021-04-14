@@ -21,8 +21,13 @@ function Main() {
     const { currentTopic, cryptoFrequency } = useAppState();
     useEffect(() => {
         const init = async () => {
-            let topics = loadTopics();
-            if (topics.length === 0) {
+            let topics;
+            try {
+                topics = await loadTopics();
+                if (topics.length === 0) {
+                    topics = defaultTopics;
+                }
+            } catch (e) {
                 topics = defaultTopics;
             }
             dispatch({ type: ActionType.SET_TOPICS, topics });

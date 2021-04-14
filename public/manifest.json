@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "NewsTab",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "A new tab page with news under the search bar.",
     "chrome_url_overrides": {
         "newtab": "index.html"
@@ -11,6 +11,6 @@
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
-    "permissions": ["geolocation"],
+    "permissions": ["geolocation", "storage"],
     "content_security_policy": "script-src 'self' 'sha256-OIl2j9/OBUwjmgwcxkEW0tjiY/5IHsMHa8/YszqHWVQ=' https://www.gstatic.com; object-src 'self'"
 }
