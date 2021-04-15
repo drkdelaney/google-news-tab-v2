@@ -3,6 +3,7 @@
 A basic new tab page with news under the search bar
 
 [Chrome Web Store](https://chrome.google.com/webstore/detail/newstab/ofegllclgfaldidpfebjcleoaboaddno)
+[Firefox Add On](https://addons.mozilla.org/en-US/firefox/addon/newstab/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search)
 
 The extension uses the Google News RSS feed to get news from topics.
 It also adds the current weather of the current location in the corner of the screen.
