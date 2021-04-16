@@ -13,15 +13,23 @@ import {
     withStyles,
 } from '@material-ui/core';
 import DragIndicator from '@material-ui/icons/DragIndicator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppState } from '../context/AppContext';
 import { ActionType } from '../models';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import styled from 'styled-components';
+
+const DeleteWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+`;
 
 interface DraggableListItemProps {
     draggable: boolean;
     children: JSX.Element[];
     key: string;
-    isDragging: boolean;
     draggingOver: boolean;
     onDragStart: (event: React.DragEvent<HTMLLIElement>) => void;
     onDragEnd: (event: React.DragEvent<HTMLLIElement>) => void;
@@ -29,26 +37,26 @@ interface DraggableListItemProps {
     onDrop: (event: React.DragEvent<HTMLLIElement>) => void;
 }
 
-const DraggableListItem = withStyles((theme) => ({
+const DraggableListItem = withStyles(() => ({
     root: {
-        cursor: 'move',
-        visibility: (props: DraggableListItemProps) =>
-            props.isDragging ? 'hidden' : 'visible',
-        border: (props: DraggableListItemProps) =>
-            props.draggingOver ? '3px dashed black' : '',
+        cursor: 'grab',
+        backgroundColor: (props: DraggableListItemProps) =>
+            props.draggingOver ? 'var(--light-grey' : 'white',
         boxShadow: 'border-box',
         textTransform: 'capitalize',
+        height: 48,
     },
 }))((props: DraggableListItemProps) => {
-    const { draggingOver, isDragging, ...rest } = props; // remove unused props
+    const { draggingOver, ...rest } = props; // remove unused props
     return <ListItem {...rest} />;
 });
 
 export function EditDialog() {
     const { topics } = useAppState();
     const dispatch = useAppDispatch();
-    const [draggedTaskId, setDraggedTaskId] = useState<number>();
+    const [localTopics, setLocalTopics] = useState(topics);
     const [dragOverId, setDragOverId] = useState<number>();
+    const [hoverTrash, setHoverTrash] = useState(false);
 
     function handleClose() {
         dispatch({ type: ActionType.OPEN_MODAL, data: undefined });
@@ -56,27 +64,56 @@ export function EditDialog() {
 
     function handleDragStart(i: number, e: React.DragEvent<HTMLLIElement>) {
         e.dataTransfer.setData('dragIndex', `${i}`);
-        setDraggedTaskId(i);
     }
 
     function handleDragOver(i: number, e: React.DragEvent<HTMLLIElement>) {
+        if (i !== dragOverId) {
+            setDragOverId(i);
+            const dragIndex = e.dataTransfer.getData('dragIndex');
+            const result = Array.from(topics);
+            const [removed] = result.splice(Number(dragIndex), 1);
+            result.splice(i, 0, removed);
+            setLocalTopics(result);
+        }
         e.preventDefault();
-        setDragOverId(i);
     }
 
-    function handleDragEnd() {
-        setDraggedTaskId(undefined);
+    function handleDragEnd(e: React.DragEvent<HTMLLIElement>) {
         setDragOverId(undefined);
+        e.preventDefault();
     }
 
-    function handleDrop(i: number, e: React.DragEvent<HTMLLIElement>) {
+    function handleDrop(e: React.DragEvent<HTMLLIElement>) {
+        dispatch({ type: ActionType.SET_TOPICS, topics: localTopics });
+        e.preventDefault();
+    }
+
+    function handleDragOverTrash(e: React.DragEvent<HTMLDivElement>) {
+        setDragOverId(undefined);
+        setHoverTrash(true);
+        e.preventDefault();
+    }
+
+    function handleDragLeaveTrash(e: React.DragEvent<HTMLDivElement>) {
+        setHoverTrash(false);
+        e.preventDefault();
+    }
+
+    function handleDropTrash(e: React.DragEvent<HTMLDivElement>) {
+        setHoverTrash(false);
         const dragIndex = e.dataTransfer.getData('dragIndex');
-        const result = Array.from(topics);
-        const [removed] = result.splice(Number(dragIndex), 1);
-        result.splice(i, 0, removed);
-
-        dispatch({ type: ActionType.SET_TOPICS, topics: result });
+        const deleteThisTopic = topics[Number(dragIndex)];
+        console.log(deleteThisTopic);
+        dispatch({
+            type: ActionType.REMOVE_TOPIC,
+            key: deleteThisTopic.id,
+        });
+        e.preventDefault();
     }
+
+    useEffect(() => {
+        setLocalTopics(topics);
+    }, [topics]);
 
     return (
         <Dialog open={true} onClose={handleClose} maxWidth="xs" fullWidth>
@@ -86,31 +123,47 @@ export function EditDialog() {
                     Drag the topics to reorder.
                 </DialogContentText>
                 <List>
-                    {topics.map((topic, i) => [
+                    {localTopics.map((topic, i) => [
                         <DraggableListItem
                             key={`list-item-${i}`}
                             draggable
-                            isDragging={draggedTaskId === i}
                             draggingOver={dragOverId === i}
                             onDragStart={(event) => {
                                 handleDragStart(i, event);
                             }}
                             onDragEnd={handleDragEnd}
-                            onDrop={(event) => {
-                                handleDrop(i, event);
-                            }}
+                            onDrop={handleDrop}
                             onDragOver={(event) => {
                                 handleDragOver(i, event);
                             }}
                         >
-                            <ListItemIcon>
-                                <DragIndicator></DragIndicator>
-                            </ListItemIcon>
-                            <ListItemText>{topic.value}</ListItemText>
+                            {dragOverId !== i ? (
+                                <ListItemIcon>
+                                    <DragIndicator></DragIndicator>
+                                </ListItemIcon>
+                            ) : (
+                                <></>
+                            )}
+                            {dragOverId !== i ? (
+                                <ListItemText>{topic.value}</ListItemText>
+                            ) : (
+                                <></>
+                            )}
                         </DraggableListItem>,
                         <Divider key={`divider-${topic.id}`}></Divider>,
                     ])}
                 </List>
+                <DeleteWrapper
+                    onDragOver={handleDragOverTrash}
+                    onDragLeave={handleDragLeaveTrash}
+                    onDrop={handleDropTrash}
+                >
+                    {hoverTrash ? (
+                        <DeleteForeverIcon fontSize="large" color="error" />
+                    ) : (
+                        <DeleteIcon fontSize="large" />
+                    )}
+                </DeleteWrapper>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} autoFocus>

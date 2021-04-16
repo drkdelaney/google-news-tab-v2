@@ -1,12 +1,30 @@
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import styled from 'styled-components';
+import MenuIcon from '@material-ui/icons/Menu';
+import { useAppDispatch } from '../context/AppContext';
+import { ActionType, ModalType, Topic } from '../models';
+import { AddTab } from '../google-news';
 
 const SearchBoxWrapper = styled.div`
-    margin: 12px auto;
-    width: 580px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const MenuWrapper = styled.div`
+    position: absolute;
+    left: -40px;
+    top: 10px;
+`;
+
+const AddTabContainer = styled.div`
+    left: 595px;
+    position: absolute;
+    top: 0;
 `;
 
 const GoogleSearchBox = styled.div`
+    width: 580px;
     position: relative;
     background-color: #fff;
     height: 46px;
@@ -29,6 +47,7 @@ const Input = styled.input`
     border: none;
     background-color: transparent;
     font-size: 16px;
+    box-sizing: border-box;
 
     &:focus {
         outline: none;
@@ -37,6 +56,7 @@ const Input = styled.input`
 
 export function SearchBar() {
     const [searchText, onSearchTextChange] = useState('');
+    const dispatch = useAppDispatch();
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         onSearchTextChange(e.target.value);
     }
@@ -56,9 +76,28 @@ export function SearchBar() {
             }
         }
     }
+
+    function handleMenuClick() {
+        dispatch({
+            type: ActionType.OPEN_MODAL,
+            data: { modalType: ModalType.EDIT },
+        });
+    }
+
+    function updateSelection(topic: Topic) {
+        // setSelectedKey(topics.length);
+        dispatch({
+            type: ActionType.SET_CURRENT_TOPIC,
+            topic,
+        });
+    }
+
     return (
         <SearchBoxWrapper>
             <GoogleSearchBox>
+                <MenuWrapper onClick={handleMenuClick}>
+                    <MenuIcon />
+                </MenuWrapper>
                 <Input
                     type="text"
                     placeholder="Search Google or type a Url"
@@ -66,6 +105,14 @@ export function SearchBar() {
                     onKeyDown={handleKeyDown}
                     value={searchText}
                 />
+                <AddTabContainer>
+                    <AddTab
+                        key="addTabKey"
+                        onTabAdded={(topic: Topic) => {
+                            updateSelection(topic);
+                        }}
+                    />
+                </AddTabContainer>
             </GoogleSearchBox>
         </SearchBoxWrapper>
     );

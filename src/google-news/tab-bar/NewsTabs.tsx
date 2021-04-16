@@ -2,7 +2,6 @@ import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppState } from '../../context/AppContext';
 import { ActionType, ModalType, Topic } from '../../models';
-import { AddTab } from '.';
 import { Tabs, Tab, withStyles } from '@material-ui/core';
 import { usePrevious } from '../../util/UsePrevious';
 
@@ -13,12 +12,6 @@ const Container = styled.div`
 const Row = styled.div`
     margin: 0 auto;
     width: 700px;
-`;
-
-const AddTabContainer = styled.div<{ offset: number }>`
-    left: ${(props) => props.offset}px;
-    position: absolute;
-    top: 0;
 `;
 
 interface MenuProps {
@@ -91,26 +84,16 @@ const StyledTab = withStyles((theme) => ({
 }))((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 export function NewsTabs() {
-    const { topics } = useAppState();
+    const { topics, currentTopic } = useAppState();
     const dispatch = useAppDispatch();
     const previousTopics = usePrevious(topics);
     const [selectedKey, setSelectedKey] = useState(0);
-    const [tabOffset, setTabOffset] = useState(0);
     const rowRef = useRef() as React.MutableRefObject<HTMLDivElement>;
     const [menuRect, setMenuRect] = useState<DOMRect>();
     const [menuTopic, setMenuTopic] = useState<Topic>();
 
-    function updateSelection(topic: Topic) {
-        setSelectedKey(topics.length);
-        dispatch({
-            type: ActionType.SET_CURRENT_TOPIC,
-            topic,
-        });
-    }
-
     const handleChange = useCallback(
         (_event: any, tabIndex: number) => {
-            setSelectedKey(tabIndex);
             dispatch({
                 type: ActionType.SET_CURRENT_TOPIC,
                 topic: topics[tabIndex],
@@ -162,24 +145,19 @@ export function NewsTabs() {
         if (
             previousTopics &&
             previousTopics.length &&
-            topics[selectedKey].id !== previousTopics[selectedKey].id
+            selectedKey < topics.length &&
+            selectedKey < previousTopics.length &&
+            topics[selectedKey]?.id !== previousTopics[selectedKey]?.id
         ) {
             handleChange(null, selectedKey);
         }
     }, [topics, handleChange, previousTopics, selectedKey]);
 
-    /**
-     * Handle resizing window and set the tab offset.
-     */
     useEffect(() => {
-        function handleResize() {
-            const rowRight = rowRef.current?.getBoundingClientRect().right;
-            setTabOffset(rowRight);
-        }
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        let index = topics.findIndex((topic) => topic.id === currentTopic?.id);
+        index = index > -1 ? index : 0;
+        setSelectedKey(index);
+    }, [currentTopic]);
 
     /**
      * Handle clicking out side of context menu.
@@ -228,14 +206,6 @@ export function NewsTabs() {
                     <MenuItem onClick={handleMenuDelete}>Delete</MenuItem>
                 </Menu>
             </Row>
-            <AddTabContainer offset={tabOffset}>
-                <AddTab
-                    key="addTabKey"
-                    onTabAdded={(topic: Topic) => {
-                        updateSelection(topic);
-                    }}
-                />
-            </AddTabContainer>
         </Container>
     );
 }
