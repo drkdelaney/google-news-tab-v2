@@ -103,7 +103,6 @@ export function EditDialog() {
         setHoverTrash(false);
         const dragIndex = e.dataTransfer.getData('dragIndex');
         const deleteThisTopic = topics[Number(dragIndex)];
-        console.log(deleteThisTopic);
         dispatch({
             type: ActionType.REMOVE_TOPIC,
             key: deleteThisTopic.id,
