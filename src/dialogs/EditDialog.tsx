@@ -57,21 +57,21 @@ export function EditDialog() {
     const [localTopics, setLocalTopics] = useState(topics);
     const [dragOverId, setDragOverId] = useState<number>();
     const [hoverTrash, setHoverTrash] = useState(false);
+    const [dragIndex, setDragIndex] = useState<number>();
 
     function handleClose() {
         dispatch({ type: ActionType.OPEN_MODAL, data: undefined });
     }
 
     function handleDragStart(i: number, e: React.DragEvent<HTMLLIElement>) {
-        e.dataTransfer.setData('dragIndex', `${i}`);
+        setDragIndex(i);
     }
 
     function handleDragOver(i: number, e: React.DragEvent<HTMLLIElement>) {
-        if (i !== dragOverId) {
+        if (i !== dragOverId && dragIndex !== undefined) {
             setDragOverId(i);
-            const dragIndex = e.dataTransfer.getData('dragIndex');
             const result = Array.from(topics);
-            const [removed] = result.splice(Number(dragIndex), 1);
+            const [removed] = result.splice(dragIndex, 1);
             result.splice(i, 0, removed);
             setLocalTopics(result);
         }
@@ -79,6 +79,7 @@ export function EditDialog() {
     }
 
     function handleDragEnd(e: React.DragEvent<HTMLLIElement>) {
+        setDragIndex(undefined);
         setDragOverId(undefined);
         e.preventDefault();
     }
@@ -90,6 +91,7 @@ export function EditDialog() {
 
     function handleDragOverTrash(e: React.DragEvent<HTMLDivElement>) {
         setDragOverId(undefined);
+        setDragIndex(undefined);
         setHoverTrash(true);
         e.preventDefault();
     }
@@ -101,12 +103,13 @@ export function EditDialog() {
 
     function handleDropTrash(e: React.DragEvent<HTMLDivElement>) {
         setHoverTrash(false);
-        const dragIndex = e.dataTransfer.getData('dragIndex');
-        const deleteThisTopic = topics[Number(dragIndex)];
-        dispatch({
-            type: ActionType.REMOVE_TOPIC,
-            key: deleteThisTopic.id,
-        });
+        if (dragIndex !== undefined) {
+            const deleteThisTopic = topics[dragIndex];
+            dispatch({
+                type: ActionType.REMOVE_TOPIC,
+                key: deleteThisTopic.id,
+            });
+        }
         e.preventDefault();
     }
 
