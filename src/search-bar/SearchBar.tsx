@@ -15,6 +15,7 @@ const MenuWrapper = styled.div`
     position: absolute;
     left: -40px;
     top: 10px;
+    cursor: pointer;
 `;
 
 const AddTabContainer = styled.div`
@@ -85,7 +86,6 @@ export function SearchBar() {
     }
 
     function updateSelection(topic: Topic) {
-        // setSelectedKey(topics.length);
         dispatch({
             type: ActionType.SET_CURRENT_TOPIC,
             topic,
@@ -95,7 +95,7 @@ export function SearchBar() {
     return (
         <SearchBoxWrapper>
             <GoogleSearchBox>
-                <MenuWrapper onClick={handleMenuClick}>
+                <MenuWrapper onClick={handleMenuClick} title="Edit">
                     <MenuIcon />
                 </MenuWrapper>
                 <Input
@@ -105,7 +105,7 @@ export function SearchBar() {
                     onKeyDown={handleKeyDown}
                     value={searchText}
                 />
-                <AddTabContainer>
+                <AddTabContainer title="Add Topic">
                     <AddTab
                         key="addTabKey"
                         onTabAdded={(topic: Topic) => {
