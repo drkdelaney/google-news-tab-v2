@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "NewsTab",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "A new tab page with news under the search bar.",
     "chrome_url_overrides": {
         "newtab": "index.html"
