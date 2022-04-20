@@ -1,16 +1,16 @@
 {
-    "manifest_version": 2,
-    "name": "NewsTab",
-    "version": "2.0.3",
-    "description": "A new tab page with news under the search bar.",
-    "chrome_url_overrides": {
-        "newtab": "index.html"
-    },
-    "icons": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
-    },
-    "permissions": ["geolocation", "storage"],
-    "content_security_policy": "script-src 'self' 'sha256-WTQBG6dv04VtDGpDiJEExLPe8sYp8TkBis8HahpsOuU=' https://www.gstatic.com; object-src 'self'"
+  "manifest_version": 2,
+  "name": "NewsTab",
+  "version": "2.0.4",
+  "description": "A new tab page with news under the search bar.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["geolocation", "storage"],
+  "content_security_policy": "script-src 'self' 'sha256-WTQBG6dv04VtDGpDiJEExLPe8sYp8TkBis8HahpsOuU=' https://www.gstatic.com; object-src 'self'"
 }
