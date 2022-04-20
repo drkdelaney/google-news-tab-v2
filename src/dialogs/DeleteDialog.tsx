@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { red, grey } from '@material-ui/core/colors';
 import { useAppDispatch, useAppState } from '../context/AppContext';
-import { ActionType, ModalType } from '../models';
+import { ActionType } from '../models';
 
 const DeleteButton = withStyles(() => ({
     root: {

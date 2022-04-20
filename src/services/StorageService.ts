@@ -2,11 +2,12 @@ import { Topic } from '../models';
 const STORAGE_KEY = 'topics';
 
 export function saveTopics(topics: Topic[]): void {
-    setStorage(STORAGE_KEY, topics);
+    // setStorage(STORAGE_KEY, topics);
 }
 
 export async function loadTopics(): Promise<Topic[]> {
-    return getStorage<Topic[]>(STORAGE_KEY);
+    // return getStorage<Topic[]>(STORAGE_KEY);
+    return new Promise((resolve, reject) => {resolve([])});
 }
 
 function setStorage(key: string, value: any): void {

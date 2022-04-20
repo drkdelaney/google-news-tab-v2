@@ -17,7 +17,7 @@ export async function loadDoodles(): Promise<Doodle[]> {
         const doodleResponse = await fetch(doodleURL.href);
         const { items } = (await doodleResponse.json()) as AWSResponse<Doodle>;
         return items;
-    } catch (e) {
+    } catch (e: any) {
         throw new Error(e);
     }
 }

@@ -47,7 +47,7 @@ async function handleRequest(request: Promise<Response>) {
         const response = await request;
         const { items } = await response.json();
         return items;
-    } catch (e) {
+    } catch (e: any) {
         throw new Error(e);
     }
 }

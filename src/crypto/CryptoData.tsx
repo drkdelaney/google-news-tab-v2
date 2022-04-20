@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Chart from 'react-google-charts';
 import styled from 'styled-components';
 import { useAppDispatch, useAppState } from '../context/AppContext';

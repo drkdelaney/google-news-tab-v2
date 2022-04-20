@@ -64,7 +64,7 @@ export async function loadCryptoData(
         const response = await fetch(url.href);
         const { data } = (await response.json()) as CryptoResponse;
         return data;
-    } catch (e) {
+    } catch (e: any) {
         throw new Error(e);
     }
 }
